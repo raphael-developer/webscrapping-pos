@@ -19,6 +19,11 @@ const createScraperRoutes = (courseService, io) => {
     scraperController.getScrapingStatus(req, res)
   );
 
+  // GET /api/scraper/report - Obter relatório de cursos novos
+  router.get("/report", (req, res) =>
+    scraperController.getNewCoursesReport(req, res)
+  );
+
   return router;
 };
 

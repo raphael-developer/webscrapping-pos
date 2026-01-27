@@ -587,6 +587,70 @@ class ScraperService {
     }
   }
 
+  // Método para scraping de uma única categoria (usado para retries)
+  async scrapeSingleCategory(categoryName) {
+    try {
+      Logger.info(`scrapeSingleCategory: Iniciando scraping de "${categoryName}"`);
+      
+      // Encontrar ou criar categoria
+      let category = this.categories.find(c => c.name === categoryName);
+      if (!category) {
+        const slug = Category.createSlug(categoryName);
+        const base = new URL(this.baseUrl);
+        category = new Category({
+          id: this.categories.length + 1,
+          name: categoryName,
+          slug,
+          description: `Cursos de ${categoryName}`,
+          url: this.normalizeUnicaUrl(`${base.origin}/pos-graduacao/${slug}`),
+        });
+      }
+
+      // Garantir cluster inicializado
+      if (!this.cluster) {
+        await this.initialize();
+      }
+
+      // Configurar para máxima robustez
+      const categoryUrl = this.normalizeUnicaUrl(category.url);
+      const coursesTaskTimeout = parseInt(process.env.SCRAPER_COURSES_TASK_TIMEOUT) || 240000;
+
+      const coursesData = await this.cluster.execute({
+        type: "courses",
+        category: category.name,
+        url: categoryUrl,
+        categoryUrl: categoryUrl,
+        taskTimeout: coursesTaskTimeout,
+      });
+
+      if (!coursesData || coursesData.length === 0) {
+        Logger.warn(`scrapeSingleCategory: Nenhum curso encontrado para "${categoryName}"`);
+        return [];
+      }
+
+      // Mapear cursos
+      const courses = coursesData.map((course, index) => {
+        return new Course({
+          id: index + 1,
+          title: course.title,
+          category: category.name,
+          description: course.description,
+          duration: course.duration,
+          modality: course.modality,
+          price: course.price,
+          url: course.url,
+          imageUrl: course.imageUrl,
+        });
+      });
+
+      Logger.info(`scrapeSingleCategory: ${courses.length} cursos extraídos de "${categoryName}"`);
+      return courses;
+    } catch (error) {
+      Logger.error(`Erro em scrapeSingleCategory para "${categoryName}":`, error);
+      return [];
+    }
+  }
+
   getProgress() {
     return {
       processedCourses: this.processedCourses,

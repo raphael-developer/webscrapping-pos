@@ -1,0 +1,66 @@
+{
+  "timestamp": "2026-01-27T21:07:03.418Z",
+  "totalCourses": 880,
+  "previousTotal": 880,
+  "newCoursesCount": 0,
+  "newCourses": [],
+  "categoriesStatus": [
+    {
+      "name": "Ciências da Saúde",
+      "coursesCount": 148,
+      "status": "ok"
+    },
+    {
+      "name": "Educação",
+      "coursesCount": 304,
+      "status": "ok"
+    },
+    {
+      "name": "Empresarial, TI e Negócios",
+      "coursesCount": 193,
+      "status": "retry_needed"
+    },
+    {
+      "name": "Engenharias",
+      "coursesCount": 30,
+      "status": "ok"
+    },
+    {
+      "name": "Estética",
+      "coursesCount": 6,
+      "status": "ok"
+    },
+    {
+      "name": "Gastronomia",
+      "coursesCount": 5,
+      "status": "ok"
+    },
+    {
+      "name": "Jurídica",
+      "coursesCount": 87,
+      "status": "ok"
+    },
+    {
+      "name": "MBA Executivo",
+      "coursesCount": 47,
+      "status": "ok"
+    },
+    {
+      "name": "Meio Ambiente",
+      "coursesCount": 28,
+      "status": "ok"
+    },
+    {
+      "name": "Psicologia",
+      "coursesCount": 15,
+      "status": "ok"
+    },
+    {
+      "name": "Serviço Social",
+      "coursesCount": 17,
+      "status": "ok"
+    }
+  ],
+  "keptFromPrevious": 133,
+  "saved": true
+}
