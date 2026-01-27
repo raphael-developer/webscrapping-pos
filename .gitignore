@@ -1,0 +1,21 @@
+portainer_db_backup_20250921171323.db
+# Dependencies
+**/node_modules/
+
+# Logs
+logs/
+**/*.log
+start-all.out
+
+# Runtime PID/lock files
+.start-all-pids
+.backend.pid
+.frontend.pid
+**/*.pid
+
+# Env
+.env
+
+# OS / editor
+.DS_Store
+Thumbs.db

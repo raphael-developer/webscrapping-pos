@@ -1,0 +1,232 @@
+const ScraperService = require("../services/ScraperService");
+const Logger = require("../utils/Logger");
+
+class ScraperController {
+  constructor(courseService, io) {
+    this.scraperService = new ScraperService();
+    this.courseService = courseService;
+    this.io = io;
+    this.isScrapingInProgress = false;
+  }
+
+  emitLog(level, message, data = {}) {
+    if (this.io) {
+      this.io.to('scraping-logs').emit('scraping-log', {
+        level,
+        message,
+        data,
+        timestamp: new Date().toISOString()
+      });
+    }
+    
+    // Log normal também
+    Logger[level](message, data);
+  }
+
+  async startScraping(req, res) {
+    try {
+      if (this.isScrapingInProgress) {
+        return res.status(409).json({
+          success: false,
+          message: "Scraping já está em andamento",
+        });
+      }
+
+      // tentar inicializar o scraper para detectar erros (ex: Chrome ausente)
+      try {
+        if (!this.scraperService.initialized) {
+          await this.scraperService.initialize();
+        }
+      } catch (initError) {
+        Logger.error("Erro ao inicializar scraper (startScraping):", initError);
+        return res.status(500).json({
+          success: false,
+          message:
+            "Erro ao inicializar scraper: " + (initError.message || initError),
+        });
+      }
+
+      this.isScrapingInProgress = true;
+
+      res.json({
+        success: true,
+        message: "Scraping iniciado. Processo executando em background.",
+        status: "started",
+      });
+
+      // executar scraping em background (initialize já foi chamado)
+      this.performScraping();
+    } catch (error) {
+      this.isScrapingInProgress = false;
+      Logger.error("Erro no ScraperController.startScraping:", error);
+      res.status(500).json({
+        success: false,
+        message: "Erro ao iniciar scraping",
+      });
+    }
+  }
+
+  async testScraping(req, res) {
+    try {
+      if (this.isScrapingInProgress) {
+        return res.status(409).json({
+          success: false,
+          message: "Scraping já está em andamento",
+        });
+      }
+
+      this.isScrapingInProgress = true;
+
+      res.json({
+        success: true,
+        message: "Teste de scraping iniciado. Logs sendo enviados via WebSocket.",
+        status: "started",
+      });
+
+      // Executar teste em background
+      this.performTestScraping();
+    } catch (error) {
+      this.isScrapingInProgress = false;
+      Logger.error("Erro no teste de scraping:", error);
+      res.status(500).json({
+        success: false,
+        message: "Erro ao iniciar teste de scraping",
+      });
+    }
+  }
+
+  async performTestScraping() {
+    try {
+      this.emitLog("info", "🚀 Iniciando processo de teste de scraping");
+
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      this.emitLog("info", "⚙️ Inicializando ScraperService...");
+      
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      this.emitLog("info", "✅ ScraperService inicializado com sucesso");
+
+      this.emitLog("info", "🔍 Obtendo categorias...");
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      this.emitLog("info", "✅ Encontradas 11 categorias");
+
+      const categorias = [
+        "Ciências da Saúde",
+        "Educação", 
+        "Empresarial, TI e Negócios",
+        "Engenharias",
+        "Estética"
+      ];
+
+      let totalCursos = 0;
+
+      for (let i = 0; i < categorias.length; i++) {
+        const categoria = categorias[i];
+        this.emitLog("info", `🎯 Processando categoria: ${categoria}`);
+        
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        // Simular cliques no botão "Carregar mais"
+        const cliques = Math.floor(Math.random() * 5) + 2; // 2 a 6 cliques
+        for (let j = 1; j <= cliques; j++) {
+          this.emitLog("info", `🔄 Clicando em "Carregar mais cursos" (${j}/${cliques})`);
+          await new Promise(resolve => setTimeout(resolve, 800));
+          
+          const cursosNovos = Math.floor(Math.random() * 20) + 10; // 10 a 29 cursos
+          totalCursos += cursosNovos;
+          this.emitLog("info", `✅ Tentativa ${j}: +${cursosNovos} cursos (total: ${totalCursos})`);
+        }
+        
+        const cursosCategoria = Math.floor(Math.random() * 50) + 30; // 30 a 79 cursos
+        this.emitLog("info", `✅ Encontrados ${cursosCategoria} cursos em ${categoria}`);
+        this.emitLog("info", `✅ Categoria ${categoria} processada (${i + 1}/${categorias.length})`);
+      }
+
+      this.emitLog("info", "💾 Atualizando dados no banco...");
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      this.emitLog("info", `🎉 Teste de scraping concluído! Total simulado: ${totalCursos} cursos`);
+      this.emitLog("info", "🔄 Finalizando ScraperService...");
+      await new Promise(resolve => setTimeout(resolve, 500));
+      this.emitLog("info", "✅ Teste finalizado com sucesso");
+
+    } catch (error) {
+      this.emitLog("error", `❌ Erro durante o teste de scraping: ${error.message}`);
+    } finally {
+      this.isScrapingInProgress = false;
+    }
+  }
+    try {
+      this.emitLog("info", "🚀 Iniciando processo de scraping");
+
+      if (!this.scraperService.initialized) {
+        this.emitLog("info", "⚙️ Inicializando ScraperService...");
+        await this.scraperService.initialize();
+        this.emitLog("info", "✅ ScraperService inicializado com sucesso");
+      }
+
+      this.emitLog("info", "📊 Coletando dados dos cursos...");
+      const scrapedData = await this.scraperService.scrapeAllCourses();
+
+      this.emitLog("info", "💾 Atualizando dados no banco...");
+      // Atualizar dados no CourseService
+      await this.courseService.updateCoursesData(scrapedData);
+
+      this.emitLog("info", `🎉 Scraping concluído com sucesso! Total: ${scrapedData.totalCourses} cursos`);
+    } catch (error) {
+      this.emitLog("error", `❌ Erro durante o scraping: ${error.message}`);
+      Logger.error("Erro durante o scraping:", error);
+    } finally {
+      this.isScrapingInProgress = false;
+      this.emitLog("info", "🔄 Finalizando ScraperService...");
+      try {
+        await this.scraperService.close();
+        this.emitLog("info", "✅ ScraperService finalizado");
+      } catch (e) {
+        this.emitLog("error", `⚠️ Erro ao fechar scraper: ${e.message}`);
+        Logger.error("Erro ao fechar scraper:", e);
+      }
+    }
+  }
+
+  async getScrapingStatus(req, res) {
+    try {
+      const stats = this.courseService.getStatistics();
+      const progress =
+        this.scraperService.getProgress &&
+        typeof this.scraperService.getProgress === "function"
+          ? this.scraperService.getProgress()
+          : {
+              processedCourses: 0,
+              processedCategories: 0,
+              totalCourses: stats.totalCourses,
+              totalCategories: stats.totalCategories,
+            };
+
+      // Do not log every status poll to reduce noise; only log when debugging
+      if (process.env.SCRAPER_DEBUG) {
+        Logger.info("GET /api/scraper/status", {
+          isScrapingInProgress: this.isScrapingInProgress,
+          progress,
+        });
+      }
+
+      res.json({
+        success: true,
+        data: {
+          isScrapingInProgress: this.isScrapingInProgress,
+          statistics: stats,
+          progress,
+        },
+        message: "Status do scraping obtido com sucesso",
+      });
+    } catch (error) {
+      Logger.error("Erro no ScraperController.getScrapingStatus:", error);
+      res.status(500).json({
+        success: false,
+        message: "Erro ao obter status do scraping",
+      });
+    }
+  }
+}
+
+module.exports = ScraperController;

@@ -1,0 +1,64 @@
+{
+  "timestamp": "2026-01-27T17:28:22.373Z",
+  "site": "Faculdade Única",
+  "url": "https://www.faculdadeunica.com.br/pos-graduacao",
+  "totalCategories": 11,
+  "totalCourses": 176,
+  "categories": [
+    {
+      "category": "Ciências da Saúde ESCOLHER CURSO",
+      "coursesCount": 6,
+      "courses": []
+    },
+    {
+      "category": "Educação ESCOLHER CURSO",
+      "coursesCount": 2,
+      "courses": []
+    },
+    {
+      "category": "Empresarial, TI e Negócios ESCOLHER CURSO",
+      "coursesCount": 2,
+      "courses": []
+    },
+    {
+      "category": "Engenharias ESCOLHER CURSO",
+      "coursesCount": 2,
+      "courses": []
+    },
+    {
+      "category": "Estética ESCOLHER CURSO",
+      "coursesCount": 2,
+      "courses": []
+    },
+    {
+      "category": "Gastronomia ESCOLHER CURSO",
+      "coursesCount": 6,
+      "courses": []
+    },
+    {
+      "category": "Jurídica ESCOLHER CURSO",
+      "coursesCount": 6,
+      "courses": []
+    },
+    {
+      "category": "MBA Executivo ESCOLHER CURSO",
+      "coursesCount": 144,
+      "courses": []
+    },
+    {
+      "category": "Meio Ambiente ESCOLHER CURSO",
+      "coursesCount": 2,
+      "courses": []
+    },
+    {
+      "category": "Psicologia ESCOLHER CURSO",
+      "coursesCount": 2,
+      "courses": []
+    },
+    {
+      "category": "Serviço Social ESCOLHER CURSO",
+      "coursesCount": 2,
+      "courses": []
+    }
+  ]
+}

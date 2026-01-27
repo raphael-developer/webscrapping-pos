@@ -1,0 +1,30 @@
+{
+  "name": "webscrapping-backend",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "node ../kill-port.js 3000 && npx nodemon src/server.js",
+    "start": "node src/server.js",
+    "scrape": "node src/scripts/scraper.js",
+    "full:scrape": "node src/scripts/full-scrape-count.js",
+    "scrape:categories": "node src/scripts/scrape-by-categories.js",
+    "scrape:faculdade": "node src/scripts/faculdade-unica-scraper.js",
+    "kill": "node ../kill-port.js"
+  },
+  "dependencies": {
+    "cheerio": "^1.2.0",
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "helmet": "^7.1.0",
+    "puppeteer": "^21.5.2",
+    "puppeteer-cluster": "^0.23.0",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
+    "socket.io": "^4.8.1",
+    "winston": "^3.11.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}

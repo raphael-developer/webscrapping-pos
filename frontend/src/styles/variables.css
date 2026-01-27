@@ -1,0 +1,7 @@
+/* Global CSS variables for the app */
+:root {
+  --app-primary: #7500ff;
+}
+
+/* Helper derived colors (optional) */
+/* You can use rgba(var(--v-theme-primary), 0.1) where Vuetify exposes rgb variables */
