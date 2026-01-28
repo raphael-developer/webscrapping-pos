@@ -42,12 +42,18 @@ const actions = {
     // Busca estatísticas reais do backend
     try {
       const response = await ApiService.getStatistics();
-      if (response.data && response.data.success) {
+      // O backend retorna { success: true, data: {...}, message: '...' }
+      if (response.data && response.data.success && response.data.data) {
         return response.data.data;
+      } else if (response.data && response.data.totalCourses !== undefined) {
+        // Fallback se retornar diretamente
+        return response.data;
       } else {
+        console.warn("Formato de estatísticas inesperado:", response.data);
         return { totalCourses: 0, totalCategories: 0 };
       }
     } catch (error) {
+      console.error("Erro ao buscar estatísticas:", error);
       return { totalCourses: 0, totalCategories: 0 };
     }
   },
@@ -110,7 +116,7 @@ const actions = {
         });
       } else {
         throw new Error(
-          response.message || "Erro ao buscar cursos da categoria"
+          response.message || "Erro ao buscar cursos da categoria",
         );
       }
     } catch (error) {

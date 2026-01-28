@@ -8,15 +8,20 @@ Sistema completo de web scraping para coletar e exibir todos os cursos de pós-g
 - **Arquitetura MVC** com separação clara de responsabilidades
 - **Puppeteer Cluster** para scraping eficiente com concorrência
 - **Express.js** para API REST
+- **Socket.IO** para logs em tempo real
 - **Winston** para logging estruturado
+- **Rate Limiting** para proteção contra abusos
+- **Validação de entrada** em todas as rotas
+- **Graceful Shutdown** para encerramento seguro
 - **Princípios SOLID** aplicados em todas as classes
 
 ### Frontend (Vue.js)
-- **Vue.js 2** com Composition API
-- **Vuetify** para interface Material Design
+- **Vue 3** com Composition API
+- **Vuetify 3** para interface Material Design
 - **Vuex** para gerenciamento de estado
 - **Vue Router** para navegação
 - **Axios** para comunicação com API
+- **Socket.IO Client** para logs em tempo real
 
 ## 📁 Estrutura do Projeto
 
@@ -24,14 +29,20 @@ Sistema completo de web scraping para coletar e exibir todos os cursos de pós-g
 webScrapping2/
 ├── backend/
 │   ├── src/
+│   │   ├── config/          # Configurações centralizadas
 │   │   ├── controllers/     # Controllers MVC
-│   │   ├── services/        # Lógica de negócio
+│   │   ├── middlewares/     # Middlewares (validação, rate limit)
 │   │   ├── models/          # Modelos de dados
 │   │   ├── routes/          # Definição de rotas
-│   │   ├── utils/           # Utilitários
-│   │   ├── config/          # Configurações
+│   │   ├── services/        # Lógica de negócio
+│   │   ├── tests/           # Testes unitários
+│   │   ├── utils/           # Utilitários (Logger, Errors)
 │   │   └── scripts/         # Scripts auxiliares
+│   ├── backups/             # Backups automáticos
 │   ├── logs/                # Arquivos de log
+│   ├── scraping-history/    # Histórico de scrapes
+│   ├── scraping-reports/    # Relatórios de scrapes
+│   ├── API.md               # Documentação da API
 │   └── package.json
 ├── frontend/
 │   ├── src/
@@ -49,55 +60,66 @@ webScrapping2/
 ## 🚀 Instalação e Execução
 
 ### Pré-requisitos
-- Node.js 16+
+- Node.js 18+
 - npm ou yarn
 
 ### Backend
 ```bash
 cd backend
 npm install
-npm run dev
+cp .env.example .env  # Configure as variáveis
+npm run dev           # Desenvolvimento
+npm start             # Produção
 ```
 
 ### Frontend
 ```bash
 cd frontend
 npm install
-npm run serve
+npm run dev           # Desenvolvimento
+npm run build         # Build produção
 ```
 
 ### Executar Scraping
 ```bash
 cd backend
-npm run scrape
+npm run scrape         # Scraping básico
+npm run full:scrape    # Scraping completo
 ```
 
 ## 🔧 Configuração
 
-### Backend (.env)
+Veja o arquivo `backend/.env.example` para todas as opções disponíveis.
+
+### Principais configurações:
 ```env
+# Servidor
 PORT=3000
 NODE_ENV=development
-SCRAPER_CONCURRENCY=5
-SCRAPER_MAX_RETRIES=3
-SCRAPER_TIMEOUT=30000
-TARGET_URL=https://www.faculdadeunica.com.br/pos-graduacao
-```
 
-### Frontend (.env)
-```env
-VUE_APP_API_URL=http://localhost:3000/api
-VUE_APP_TITLE=Faculdade Única - Cursos
+# Scraper
+SCRAPER_CONCURRENCY=1
+SCRAPER_FORCE_HEADLESS=1
+SCRAPER_BLOCK_RESOURCES=1
+
+# Rate Limiting
+RATE_LIMIT_MAX=100
+RATE_LIMIT_SCRAPER_MAX=5
 ```
 
 ## 📊 Funcionalidades
 
 ### Backend
-- ✅ Scraping de todas as categorias de cursos
+- ✅ Scraping inteligente de todas as categorias
+- ✅ Detecção automática de cursos novos
 - ✅ Processamento de conteúdo AJAX dinâmico
-- ✅ API REST completa com filtros
+- ✅ API REST completa com validação
+- ✅ WebSocket para logs em tempo real
+- ✅ Rate limiting para proteção
 - ✅ Sistema de logging estruturado
+- ✅ Backup automático antes de alterações
 - ✅ Tratamento de erros robusto
+- ✅ Graceful shutdown
 - ✅ Arquitetura escalável
 
 ### Frontend

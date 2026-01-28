@@ -238,7 +238,13 @@ const fetchScrapingStatus = async () => {
 const loadStatistics = async () => {
   try {
     const stats = await store.dispatch('courses/fetchStatistics')
-    statistics.value = stats
+    console.log('Estatísticas carregadas:', stats)
+    if (stats && (stats.totalCourses !== undefined || stats.totalCategories !== undefined)) {
+      statistics.value = {
+        totalCourses: stats.totalCourses || 0,
+        totalCategories: stats.totalCategories || 0
+      }
+    }
   } catch (error) {
     console.error('Erro ao carregar estatísticas:', error)
   }

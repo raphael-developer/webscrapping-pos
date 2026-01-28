@@ -1,0 +1,729 @@
+{
+  "timestamp": "2026-01-28T14:45:22.617Z",
+  "totalCourses": 880,
+  "previousTotal": 787,
+  "newCoursesCount": 93,
+  "newCourses": [
+    {
+      "title": "GESTÃO DE PRODUÇÃO",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/gestao-de-producao-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "GESTÃO DE PRODUÇÃO E LOGÍSTICA EMPRESARIAL",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/gestao-de-producao-e-logistica-empresarial-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "GESTÃO DE PRODUÇÃO E QUALIDADE",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/gestao-de-producao-e-qualidade-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "GESTÃO DE PRODUÇÃO INDUSTRIAL",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/gestao-de-producao-industrial-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "GESTÃO DE PROGRAMAS DE SAÚDE DA FAMÍLIA",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/gestao-de-programas-de-saude-da-familia-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "GESTÃO DE PROJETOS E SUPRIMENTOS",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/gestao-de-projetos-e-suprimentos-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "GESTÃO DE QUALIDADE",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/gestao-de-qualidade-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "GESTÃO DE RECURSOS HUMANOS E MEIO AMBIENTE",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/gestao-de-recursos-humanos-e-meio-ambiente-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "GESTÃO DE RISCOS E COMPLIANCE",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/gestao-de-riscos-e-compliance-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "GESTÃO DE SAÚDE PÚBLICA E MEIO AMBIENTE",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/gestao-de-saude-publica-e-meio-ambiente-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "GESTÃO DE UNIDADES DE ALIMENTAÇÃO E NUTRIÇÃO (UAN)",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/gestao-de-unidades-de-alimentacao-e-nutricao-(uan)-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "GESTÃO DO SISTEMA PRISIONAL",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/gestao-do-sistema-prisional-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "GESTÃO DO TERCEIRO SETOR",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/gestao-do-terceiro-setor-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "GESTÃO E ENFERMAGEM DO TRABALHO",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/gestao-e-enfermagem-do-trabalho-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "GESTÃO E LOGÍSTICA HOSPITALAR",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/gestao-e-logistica-hospitalar-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "GESTÃO E PROJETOS EM TURISMO",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/gestao-e-projetos-em-turismo-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "GESTÃO ECONÔMICA E FINANCEIRA",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/gestao-economica-e-financeira-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "GESTÃO EM AUDITORIA, PERÍCIA E LICENCIAMENTO AMBIENTAL",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/gestao-em-auditoria-pericia-e-licenciamento-ambiental-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "GESTÃO EM ENFERMAGEM DE URGÊNCIA E EMERGÊNCIA",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/gestao-em-enfermagem-de-urgencia-e-emergencia-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "GESTÃO EM LOGÍSTICA",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/gestao-em-logistica-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "GESTÃO EM MARKETING B2B E INTERNACIONAL",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/gestao-em-marketing-b2b-e-internacional-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "GESTÃO EM MARKETING DE SERVIÇOS E SOCIAL",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/gestao-em-marketing-de-servicos-e-social-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "GESTÃO EM PETRÓLEO E GÁS",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/gestao-em-petroleo-e-gas-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "GESTÃO EM SERVIÇOS NOTARIAIS E REGISTROS PÚBLICOS",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/juridica/gestao-em-servicos-notariais-e-registros-publicos-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "GESTÃO EMPREENDEDORA E FINANÇAS",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/gestao-empreendedora-e-financas-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "GESTÃO EMPRESARIAL",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/gestao-empresarial-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "GESTÃO EMPRESARIAL DIGITAL",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/gestao-empresarial-digital-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "GESTÃO ERGONÔMICA E SAÚDE OCUPACIONAL",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/gestao-ergonomica-e-saude-ocupacional-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "GESTÃO ESTRATÉGICA ADMINISTRATIVA E FINANCEIRA",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/gestao-estrategica-administrativa-e-financeira-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "GESTÃO ESTRATÉGICA DE CUSTOS E FINANÇAS EMPRESARIAIS",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/gestao-estrategica-de-custos-e-financas-empresariais-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "GESTÃO ESTRATÉGICA EM MARKETING DIGITAL",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/gestao-estrategica-em-marketing-digital-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "GESTÃO ESTRATÉGICA EM NEGÓCIOS GASTRONÔMICOS",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/gestao-estrategica-em-negocios-gastronomicos-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "GESTÃO ESTRATÉGICA EM SAÚDE PÚBLICA E COLETIVA",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/ciencias-da-saude/gestao-estrategica-em-saude-publica-e-coletiva-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "GESTÃO FARMACÊUTICA",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/gestao-farmaceutica-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "GESTÃO FINANCEIRA ESCOLAR",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/gestao-financeira-escolar-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "GESTÃO INDUSTRIAL",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/gestao-industrial-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "GESTÃO INTEGRADA EM QSMS",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/gestao-integrada-em-qsms-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "GESTÃO MUNICIPAL",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/gestao-municipal-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "GESTÃO PÚBLICA",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/gestao-publica-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "GESTÃO PÚBLICA E DE PESSOAS",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/gestao-publica-e-de-pessoas-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "GESTÃO PÚBLICA E LEGISLAÇÃO URBANA",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/gestao-publica-e-legislacao-urbana-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "GESTÃO PÚBLICA E SOCIAL",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/gestao-publica-e-social-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "GESTÃO SOCIAL",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/gestao-social-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "GOVERNANÇA EM TI",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/governanca-em-ti-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "INOVAÇÃO E EMPREENDEDORISMO",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/inovacao-e-empreendedorismo-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "INTELIGÊNCIA ARTIFICIAL",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/inteligencia-artificial-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "JORNALISMO COM ÊNFASE EM EMPREENDEDORISMO",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/jornalismo-com-enfase-em-empreendedorismo-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "JORNALISMO DIGITAL",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/jornalismo-digital-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "LIDERANÇA E GESTÃO DE EQUIPES DE ALTA PERFORMANCE",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/lideranca-e-gestao-de-equipes-de-alta-performance-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "LIDERANÇA POSITIVA",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/lideranca-positiva-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "LOGÍSTICA E SUPPLY CHAIN MANAGEMENT",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/logistica-e-supply-chain-management-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "MACHINE LEARNING E IA",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/machine-learning-e-ia-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "MARKETING E GESTÃO ESTRATÉGICA",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/marketing-e-gestao-estrategica-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "MARKETING INTERNACIONAL",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/marketing-internacional-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "MARKETING POLÍTICO E ELEITORAL DIGITAL",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/marketing-politico-e-eleitoral-digital-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "MATEMÁTICA FINANCEIRA E ESTATÍSTICA",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/matematica-financeira-e-estatistica-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "MBA EM FINANÇAS INTERNACIONAIS",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/mba-em-financas-internacionais-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "MBA EM GESTÃO AMBIENTAL",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/mba-em-gestao-ambiental-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "MBA EM GESTÃO BANCÁRIA",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/mba-em-gestao-bancaria-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "MBA EM GESTÃO COMERCIAL DE INSTITUIÇÕES FINANCEIRAS",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/mba-em-gestao-comercial-de-instituicoes-financeiras-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "MBA EM GESTÃO DA QUALIDADE",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/mba-em-gestao-da-qualidade-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "MBA EM GESTÃO DE PROCESSOS",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/mba-em-gestao-de-processos-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "MBA EM GESTÃO ESTRATÉGICA EM COMPRAS",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/mba-em-gestao-estrategica-em-compras-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "MBA EM GESTÃO OPERACIONAL E LOGÍSTICA EMPRESARIAL",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/mba-em-gestao-operacional-e-logistica-empresarial-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "MBA EM INOVAÇÃO E EMPREENDEDORISMO",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/mba-em-inovacao-e-empreendedorismo-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "MBA EM MARKETING DIGITAL E VENDAS",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/mba-em-marketing-digital-e-vendas-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "MBA EM PROCESSOS GERENCIAIS",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/mba-em-processos-gerenciais-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "MBA EM TECNOLOGIA PARA NEGÓCIOS: AI, DATA SCIENCE E BIG DATA",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/mba-em-tecnologia-para-negocios:-ai-data-science-e-big-data-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "MBA EXECUTIVO EM INTELIGÊNCIA COMERCIAL E DE MERCADO",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/mba-executivo-em-inteligencia-comercial-e-de-mercado-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "MBA EXECUTIVO EM NEGÓCIOS INTERNACIONAIS",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/mba-executivo-em-negocios-internacionais-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "NEGÓCIOS DIGITAIS",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/negocios-digitais-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "ORÇAMENTO PÚBLICO",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/orcamento-publico-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "PERÍCIA CONTÁBIL",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/pericia-contabil-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "PERÍCIA FORENSE DIGITAL E COMPUTACIONAL",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/pericia-forense-digital-e-computacional-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "PLANEJAMENTO E GESTÃO ESTRATÉGICA DE FINANÇAS",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/planejamento-e-gestao-estrategica-de-financas-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "PLANEJAMENTO E GESTÃO ESTRATÉGICA DE PESSOAS",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/planejamento-e-gestao-estrategica-de-pessoas-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "PLANEJAMENTO EMPRESARIAL",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/planejamento-empresarial-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "POLÍTICA CRIMINAL E GESTÃO PENITENCIÁRIA",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/politica-criminal-e-gestao-penitenciaria-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "PRODUÇÃO AUDIOVISUAL PARA WEB",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/producao-audiovisual-para-web-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "PRODUÇÃO INDUSTRIAL",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/producao-industrial-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "PROJETOS E SUPRIMENTOS",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/projetos-e-suprimentos-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "PSICOLOGIA ORGANIZACIONAL",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/psicologia-organizacional-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "PUBLICIDADE",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/publicidade-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "RECRUTAMENTO E SELEÇÃO",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/recrutamento-e-selecao-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "REDE DE COMPUTADORES",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/rede-de-computadores-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "RELAÇÕES INTERNACIONAIS",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/relacoes-internacionais-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "SEGURANÇA CORPORATIVA",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/seguranca-corporativa-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "SEGURANÇA DA INFORMAÇÃO",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/seguranca-da-informacao-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "SEGURANÇA DO TRABALHO E GESTÃO AMBIENTAL",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/seguranca-do-trabalho-e-gestao-ambiental-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "SEGURANÇA DO TRABALHO E GESTÃO DE PESSOAS",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/seguranca-do-trabalho-e-gestao-de-pessoas-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "SEGURANÇA DO TRABALHO E LOGÍSTICA EMPRESARIAL",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/seguranca-do-trabalho-e-logistica-empresarial-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "SEGURANÇA PRIVADA",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/seguranca-privada-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    },
+    {
+      "title": "SISTEMA ÚNICO DE ASSISTÊNCIA SOCIAL",
+      "category": "Empresarial, TI e Negócios",
+      "url": "https://faculdadeunica.com.br/pos-graduacao/empresarial-ti-e-negocios/sistema-unico-de-assistencia-social-720",
+      "duration": "720 horas",
+      "discoveredAt": "2026-01-28T14:45:22.617Z"
+    }
+  ],
+  "categoriesStatus": [
+    {
+      "name": "Ciências da Saúde",
+      "coursesCount": 148,
+      "minimum": 140,
+      "status": "ok"
+    },
+    {
+      "name": "Educação",
+      "coursesCount": 304,
+      "minimum": 300,
+      "status": "ok"
+    },
+    {
+      "name": "Empresarial, TI e Negócios",
+      "coursesCount": 193,
+      "minimum": 85,
+      "status": "ok"
+    },
+    {
+      "name": "Engenharias",
+      "coursesCount": 30,
+      "minimum": 8,
+      "status": "ok"
+    },
+    {
+      "name": "Estética",
+      "coursesCount": 6,
+      "minimum": 5,
+      "status": "ok"
+    },
+    {
+      "name": "Gastronomia",
+      "coursesCount": 5,
+      "minimum": 4,
+      "status": "ok"
+    },
+    {
+      "name": "Jurídica",
+      "coursesCount": 87,
+      "minimum": 35,
+      "status": "ok"
+    },
+    {
+      "name": "MBA Executivo",
+      "coursesCount": 47,
+      "minimum": 40,
+      "status": "ok"
+    },
+    {
+      "name": "Meio Ambiente",
+      "coursesCount": 28,
+      "minimum": 25,
+      "status": "ok"
+    },
+    {
+      "name": "Psicologia",
+      "coursesCount": 15,
+      "minimum": 12,
+      "status": "ok"
+    },
+    {
+      "name": "Serviço Social",
+      "coursesCount": 17,
+      "minimum": 15,
+      "status": "ok"
+    }
+  ],
+  "keptFromPrevious": 0,
+  "saved": true
+}
