@@ -192,15 +192,15 @@ class ScrapedCourseRepository {
   async createBackup(suffix = null) {
     const fs = require("fs").promises;
     const path = require("path");
-    
+
     const timestamp = suffix || Date.now();
     const backupDir = path.join(path.dirname(this.filePath), "backups");
     const backupPath = path.join(backupDir, `backup-${timestamp}.json`);
-    
+
     await fs.mkdir(backupDir, { recursive: true });
     const content = await fs.readFile(this.filePath, "utf-8");
     await fs.writeFile(backupPath, content, "utf-8");
-    
+
     return backupPath;
   }
 

@@ -44,7 +44,10 @@ class GetCoursesUseCase {
 
     // Paginação
     const page = Math.max(1, parseInt(filters.page) || 1);
-    const pageSize = Math.min(100, Math.max(1, parseInt(filters.pageSize) || 50));
+    const pageSize = Math.min(
+      100,
+      Math.max(1, parseInt(filters.pageSize) || 50),
+    );
     const totalItems = courses.length;
     const totalPages = Math.ceil(totalItems / pageSize);
     const startIndex = (page - 1) * pageSize;

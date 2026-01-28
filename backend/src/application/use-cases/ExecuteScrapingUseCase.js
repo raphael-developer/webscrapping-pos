@@ -25,7 +25,7 @@ class ExecuteScrapingUseCase {
     scrapingRepository,
     courseRepository,
     storageRepository,
-    eventEmitter = null
+    eventEmitter = null,
   ) {
     this.scrapingRepository = scrapingRepository;
     this.courseRepository = courseRepository;
@@ -62,10 +62,14 @@ class ExecuteScrapingUseCase {
 
       // 2. Carregar cursos existentes para comparação
       const existingCourses = await this.courseRepository.findAll();
-      this.emit("info", `📊 ${existingCourses.length} cursos existentes carregados`);
+      this.emit(
+        "info",
+        `📊 ${existingCourses.length} cursos existentes carregados`,
+      );
 
       // 3. Extrair categorias
-      const categories = await this.scrapingRepository.extractCategories(baseUrl);
+      const categories =
+        await this.scrapingRepository.extractCategories(baseUrl);
       this.emit("info", `📁 ${categories.length} categorias encontradas`);
 
       // 4. Extrair cursos de cada categoria
@@ -74,12 +78,12 @@ class ExecuteScrapingUseCase {
         const category = categories[i];
         this.emit(
           "info",
-          `🔍 [${i + 1}/${categories.length}] Extraindo: ${category.name}`
+          `🔍 [${i + 1}/${categories.length}] Extraindo: ${category.name}`,
         );
 
         const courses = await this.scrapingRepository.extractCoursesByCategory(
           category.url,
-          { categoryName: category.name }
+          { categoryName: category.name },
         );
 
         // Processar e validar cada curso
@@ -91,16 +95,22 @@ class ExecuteScrapingUseCase {
 
         this.emit(
           "info",
-          `✅ ${processedCourses.length} cursos válidos extraídos de ${category.name}`
+          `✅ ${processedCourses.length} cursos válidos extraídos de ${category.name}`,
         );
       }
 
       // 5. Detectar mudanças
-      const changes = ScrapingService.detectChanges(allCourses, existingCourses);
+      const changes = ScrapingService.detectChanges(
+        allCourses,
+        existingCourses,
+      );
       this.emit("info", `📈 Detecção de mudanças concluída:`);
       this.emit("info", `   - Novos: ${changes.newCourses.length}`);
       this.emit("info", `   - Atualizados: ${changes.updatedCourses.length}`);
-      this.emit("info", `   - Sem alteração: ${changes.unchangedCourses.length}`);
+      this.emit(
+        "info",
+        `   - Sem alteração: ${changes.unchangedCourses.length}`,
+      );
 
       // 6. Criar backup se solicitado
       if (createBackup && existingCourses.length > 0) {
@@ -114,7 +124,10 @@ class ExecuteScrapingUseCase {
       this.emit("info", `✅ ${mergedCourses.length} cursos salvos`);
 
       // 8. Calcular estatísticas finais
-      const statistics = ScrapingService.calculateStatistics(changes, startTime);
+      const statistics = ScrapingService.calculateStatistics(
+        changes,
+        startTime,
+      );
 
       // 9. Gerar relatório
       const report = {
@@ -157,7 +170,8 @@ class ExecuteScrapingUseCase {
     // Adicionar cursos atualizados (mantém ID, atualiza dados)
     for (const course of changes.updatedCourses) {
       const key = ScrapingService.generateCourseKey(course);
-      if (key) coursesMap.set(key, { ...course, updatedAt: new Date().toISOString() });
+      if (key)
+        coursesMap.set(key, { ...course, updatedAt: new Date().toISOString() });
     }
 
     // Gerar IDs para novos cursos

@@ -15,11 +15,12 @@ describe("CourseComparisonService", () => {
         { title: "Curso C", category: "Direito" },
       ];
 
-      const wooCommerceCourses = [
-        { name: "Curso A", category: "Educação" },
-      ];
+      const wooCommerceCourses = [{ name: "Curso A", category: "Educação" }];
 
-      const result = CourseComparisonService.compare(scrapedCourses, wooCommerceCourses);
+      const result = CourseComparisonService.compare(
+        scrapedCourses,
+        wooCommerceCourses,
+      );
 
       expect(result.onlyInSite).toHaveLength(2);
       expect(result.onlyInSite.map(c => c.title)).toContain("Curso B");
@@ -27,31 +28,33 @@ describe("CourseComparisonService", () => {
     });
 
     it("deve identificar cursos presentes apenas na API", () => {
-      const scrapedCourses = [
-        { title: "Curso A", category: "Educação" },
-      ];
+      const scrapedCourses = [{ title: "Curso A", category: "Educação" }];
 
       const wooCommerceCourses = [
         { name: "Curso A", category: "Educação" },
         { name: "Curso Extra", category: "TI" },
       ];
 
-      const result = CourseComparisonService.compare(scrapedCourses, wooCommerceCourses);
+      const result = CourseComparisonService.compare(
+        scrapedCourses,
+        wooCommerceCourses,
+      );
 
       expect(result.onlyInAPI).toHaveLength(1);
       expect(result.onlyInAPI[0].name).toBe("Curso Extra");
     });
 
     it("deve identificar cursos presentes em ambos", () => {
-      const scrapedCourses = [
-        { title: "Curso Comum", category: "Educação" },
-      ];
+      const scrapedCourses = [{ title: "Curso Comum", category: "Educação" }];
 
       const wooCommerceCourses = [
         { name: "Curso Comum", category: "Educação" },
       ];
 
-      const result = CourseComparisonService.compare(scrapedCourses, wooCommerceCourses);
+      const result = CourseComparisonService.compare(
+        scrapedCourses,
+        wooCommerceCourses,
+      );
 
       expect(result.inBoth).toHaveLength(1);
       expect(result.onlyInSite).toHaveLength(0);
@@ -69,7 +72,10 @@ describe("CourseComparisonService", () => {
         { name: "Curso C", category: "TI" },
       ];
 
-      const result = CourseComparisonService.compare(scrapedCourses, wooCommerceCourses);
+      const result = CourseComparisonService.compare(
+        scrapedCourses,
+        wooCommerceCourses,
+      );
 
       expect(result.statistics.totalScraped).toBe(2);
       expect(result.statistics.totalWooCommerce).toBe(2);
@@ -96,7 +102,10 @@ describe("CourseComparisonService", () => {
         { name: "Administração Pública", category: "Gestão" },
       ];
 
-      const result = CourseComparisonService.compare(scrapedCourses, wooCommerceCourses);
+      const result = CourseComparisonService.compare(
+        scrapedCourses,
+        wooCommerceCourses,
+      );
 
       expect(result.inBoth).toHaveLength(1);
     });
@@ -104,22 +113,37 @@ describe("CourseComparisonService", () => {
 
   describe("normalizeForComparison", () => {
     it("deve normalizar texto removendo acentos", () => {
-      const result = CourseComparisonService.normalizeForComparison("Administração Pública");
+      const result = CourseComparisonService.normalizeForComparison(
+        "Administração Pública",
+      );
       expect(result).toBe("administracao publica");
     });
 
     it("deve retornar string vazia para valores nulos", () => {
       expect(CourseComparisonService.normalizeForComparison(null)).toBe("");
-      expect(CourseComparisonService.normalizeForComparison(undefined)).toBe("");
+      expect(CourseComparisonService.normalizeForComparison(undefined)).toBe(
+        "",
+      );
     });
   });
 
   describe("findDifferences", () => {
     it("deve detectar diferenças entre cursos", () => {
-      const scraped = { title: "Curso X", description: "Descrição A", duration: "720h" };
-      const wooCommerce = { name: "Curso X", description: "Descrição B", duration: "720h" };
+      const scraped = {
+        title: "Curso X",
+        description: "Descrição A",
+        duration: "720h",
+      };
+      const wooCommerce = {
+        name: "Curso X",
+        description: "Descrição B",
+        duration: "720h",
+      };
 
-      const differences = CourseComparisonService.findDifferences(scraped, wooCommerce);
+      const differences = CourseComparisonService.findDifferences(
+        scraped,
+        wooCommerce,
+      );
 
       expect(differences.some(d => d.field === "description")).toBe(true);
     });
@@ -128,7 +152,10 @@ describe("CourseComparisonService", () => {
       const scraped = { title: "Curso X", duration: "720h" };
       const wooCommerce = { name: "Curso X", duration: "720h" };
 
-      const differences = CourseComparisonService.findDifferences(scraped, wooCommerce);
+      const differences = CourseComparisonService.findDifferences(
+        scraped,
+        wooCommerce,
+      );
 
       // Pode haver diferenças em campos opcionais, mas não nos essenciais
       expect(Array.isArray(differences)).toBe(true);
@@ -165,7 +192,9 @@ describe("ScrapingService", () => {
     });
 
     it("deve usar valores padrão para campos ausentes", () => {
-      const result = ScrapingService.processCourseData({ title: "Curso Válido" });
+      const result = ScrapingService.processCourseData({
+        title: "Curso Válido",
+      });
 
       expect(result.category).toBe("Geral");
       expect(result.description).toBe("");
@@ -191,7 +220,9 @@ describe("ScrapingService", () => {
     it("deve extrair duração em horas", () => {
       expect(ScrapingService.extractDuration("720 horas")).toBe("720 horas");
       expect(ScrapingService.extractDuration("800h")).toBe("800 horas");
-      expect(ScrapingService.extractDuration("Duração: 360 horas")).toBe("360 horas");
+      expect(ScrapingService.extractDuration("Duração: 360 horas")).toBe(
+        "360 horas",
+      );
     });
 
     it("deve retornar string vazia para valores inválidos", () => {
@@ -205,7 +236,9 @@ describe("ScrapingService", () => {
       expect(ScrapingService.normalizeModality("ead")).toBe("EAD");
       expect(ScrapingService.normalizeModality("ONLINE")).toBe("EAD");
       expect(ScrapingService.normalizeModality("à distância")).toBe("EAD");
-      expect(ScrapingService.normalizeModality("presencial")).toBe("Presencial");
+      expect(ScrapingService.normalizeModality("presencial")).toBe(
+        "Presencial",
+      );
       expect(ScrapingService.normalizeModality("híbrido")).toBe("Híbrido");
     });
 
@@ -218,8 +251,12 @@ describe("ScrapingService", () => {
 
   describe("validateUrl", () => {
     it("deve validar URLs corretas", () => {
-      expect(ScrapingService.validateUrl("https://example.com")).toBe("https://example.com/");
-      expect(ScrapingService.validateUrl("http://test.com/path")).toBe("http://test.com/path");
+      expect(ScrapingService.validateUrl("https://example.com")).toBe(
+        "https://example.com/",
+      );
+      expect(ScrapingService.validateUrl("http://test.com/path")).toBe(
+        "http://test.com/path",
+      );
     });
 
     it("deve retornar string vazia para URLs inválidas", () => {
@@ -248,9 +285,7 @@ describe("ScrapingService", () => {
     });
 
     it("deve detectar cursos removidos", () => {
-      const newCourses = [
-        { title: "Curso A", category: "TI" },
-      ];
+      const newCourses = [{ title: "Curso A", category: "TI" }];
 
       const existingCourses = [
         { id: 1, title: "Curso A", category: "TI" },

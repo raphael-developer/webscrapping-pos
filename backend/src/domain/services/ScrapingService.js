@@ -196,9 +196,15 @@ class ScrapingService {
    * @returns {boolean}
    */
   static hasChanges(newCourse, oldCourse) {
-    const fieldsToCompare = ["description", "duration", "price", "url", "imageUrl"];
+    const fieldsToCompare = [
+      "description",
+      "duration",
+      "price",
+      "url",
+      "imageUrl",
+    ];
     return fieldsToCompare.some(
-      field => newCourse[field] !== oldCourse[field] && newCourse[field]
+      field => newCourse[field] !== oldCourse[field] && newCourse[field],
     );
   }
 

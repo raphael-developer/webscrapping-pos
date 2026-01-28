@@ -92,7 +92,7 @@ class App {
     // ===== Clean Architecture Routes =====
     // Cursos (nova arquitetura)
     this.app.use("/api/courses", courseRoutes);
-    
+
     // Comparação WooCommerce
     this.app.use("/api/comparison", comparisonRoutes);
 

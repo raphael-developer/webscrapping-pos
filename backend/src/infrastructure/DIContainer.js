@@ -138,55 +138,55 @@ function createContainer(io = null) {
   // GetCourses
   container.register(
     "getCoursesUseCase",
-    (c) => {
+    c => {
       return new GetCoursesUseCase(c.resolve("scrapedCourseRepository"));
     },
-    false
+    false,
   );
 
   // GetStatistics
   container.register(
     "getStatisticsUseCase",
-    (c) => {
+    c => {
       return new GetStatisticsUseCase(c.resolve("scrapedCourseRepository"));
     },
-    false
+    false,
   );
 
   // CompareCourses
   container.register(
     "compareCourseUseCase",
-    (c) => {
+    c => {
       return new CompareCourseUseCase(
         c.resolve("scrapedCourseRepository"),
-        c.resolve("wooCommerceRepository")
+        c.resolve("wooCommerceRepository"),
       );
     },
-    false
+    false,
   );
 
   // GetMissingCourses
   container.register(
     "getMissingCoursesUseCase",
-    (c) => {
+    c => {
       return new GetMissingCoursesUseCase(
         c.resolve("scrapedCourseRepository"),
-        c.resolve("wooCommerceRepository")
+        c.resolve("wooCommerceRepository"),
       );
     },
-    false
+    false,
   );
 
   // SyncCourses
   container.register(
     "syncCoursesUseCase",
-    (c) => {
+    c => {
       return new SyncCoursesUseCase(
         c.resolve("scrapedCourseRepository"),
-        c.resolve("wooCommerceRepository")
+        c.resolve("wooCommerceRepository"),
       );
     },
-    false
+    false,
   );
 
   // ===== EVENT EMITTER (para WebSocket) =====

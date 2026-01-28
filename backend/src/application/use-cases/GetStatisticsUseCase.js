@@ -28,7 +28,7 @@ class GetStatisticsUseCase {
     const coursesByCategory = {};
     for (const category of categories) {
       coursesByCategory[category] = courses.filter(
-        course => course.category === category
+        course => course.category === category,
       ).length;
     }
 

@@ -11,40 +11,70 @@ const GetMissingCoursesUseCase = require("../application/use-cases/GetMissingCou
 // Mock de ScrapedCourseRepository
 const createMockScrapedRepository = (courses = []) => ({
   findAll: jest.fn().mockResolvedValue(courses),
-  findById: jest.fn().mockImplementation(id => 
-    Promise.resolve(courses.find(c => c.id === id) || null)
-  ),
-  findByCategory: jest.fn().mockImplementation(category =>
-    Promise.resolve(courses.filter(c => c.category === category))
-  ),
-  findByTitle: jest.fn().mockImplementation(title =>
-    Promise.resolve(courses.filter(c => 
-      c.title.toLowerCase().includes(title.toLowerCase())
-    ))
-  ),
-  findAllCategories: jest.fn().mockResolvedValue(
-    [...new Set(courses.map(c => c.category))]
-  ),
+  findById: jest
+    .fn()
+    .mockImplementation(id =>
+      Promise.resolve(courses.find(c => c.id === id) || null),
+    ),
+  findByCategory: jest
+    .fn()
+    .mockImplementation(category =>
+      Promise.resolve(courses.filter(c => c.category === category)),
+    ),
+  findByTitle: jest
+    .fn()
+    .mockImplementation(title =>
+      Promise.resolve(
+        courses.filter(c =>
+          c.title.toLowerCase().includes(title.toLowerCase()),
+        ),
+      ),
+    ),
+  findAllCategories: jest
+    .fn()
+    .mockResolvedValue([...new Set(courses.map(c => c.category))]),
   count: jest.fn().mockResolvedValue(courses.length),
 });
 
 // Mock de WooCommerceRepository
 const createMockWooCommerceRepository = (courses = []) => ({
   findAllCourses: jest.fn().mockResolvedValue(courses),
-  findById: jest.fn().mockImplementation(id =>
-    Promise.resolve(courses.find(c => c.id === id) || null)
-  ),
-  findByCategory: jest.fn().mockImplementation(category =>
-    Promise.resolve(courses.filter(c => c.category === category))
-  ),
+  findById: jest
+    .fn()
+    .mockImplementation(id =>
+      Promise.resolve(courses.find(c => c.id === id) || null),
+    ),
+  findByCategory: jest
+    .fn()
+    .mockImplementation(category =>
+      Promise.resolve(courses.filter(c => c.category === category)),
+    ),
   count: jest.fn().mockResolvedValue(courses.length),
 });
 
 describe("GetCoursesUseCase", () => {
   const sampleCourses = [
-    { id: 1, title: "Curso A", category: "Educação", duration: "720h", modality: "EAD" },
-    { id: 2, title: "Curso B", category: "Saúde", duration: "800h", modality: "EAD" },
-    { id: 3, title: "Curso C", category: "Educação", duration: "360h", modality: "EAD" },
+    {
+      id: 1,
+      title: "Curso A",
+      category: "Educação",
+      duration: "720h",
+      modality: "EAD",
+    },
+    {
+      id: 2,
+      title: "Curso B",
+      category: "Saúde",
+      duration: "800h",
+      modality: "EAD",
+    },
+    {
+      id: 3,
+      title: "Curso C",
+      category: "Educação",
+      duration: "360h",
+      modality: "EAD",
+    },
   ];
 
   it("deve retornar todos os cursos sem filtros", async () => {
@@ -114,9 +144,27 @@ describe("GetCoursesUseCase", () => {
 
 describe("GetStatisticsUseCase", () => {
   const sampleCourses = [
-    { id: 1, title: "Curso A", category: "Educação", duration: "720", modality: "EAD" },
-    { id: 2, title: "Curso B", category: "Saúde", duration: "800", modality: "EAD" },
-    { id: 3, title: "Curso C", category: "Educação", duration: "300", modality: "Presencial" },
+    {
+      id: 1,
+      title: "Curso A",
+      category: "Educação",
+      duration: "720",
+      modality: "EAD",
+    },
+    {
+      id: 2,
+      title: "Curso B",
+      category: "Saúde",
+      duration: "800",
+      modality: "EAD",
+    },
+    {
+      id: 3,
+      title: "Curso C",
+      category: "Educação",
+      duration: "300",
+      modality: "Presencial",
+    },
   ];
 
   it("deve calcular estatísticas gerais", async () => {
@@ -189,9 +237,13 @@ describe("CompareCourseUseCase", () => {
 
   it("deve executar comparação completa", async () => {
     const mockScrapedRepo = createMockScrapedRepository(scrapedCourses);
-    const mockWooCommerceRepo = createMockWooCommerceRepository(wooCommerceCourses);
+    const mockWooCommerceRepo =
+      createMockWooCommerceRepository(wooCommerceCourses);
 
-    const useCase = new CompareCourseUseCase(mockScrapedRepo, mockWooCommerceRepo);
+    const useCase = new CompareCourseUseCase(
+      mockScrapedRepo,
+      mockWooCommerceRepo,
+    );
     const result = await useCase.execute();
 
     expect(result.onlyInSite).toHaveLength(1);
@@ -203,9 +255,13 @@ describe("CompareCourseUseCase", () => {
 
   it("deve incluir metadados na resposta", async () => {
     const mockScrapedRepo = createMockScrapedRepository(scrapedCourses);
-    const mockWooCommerceRepo = createMockWooCommerceRepository(wooCommerceCourses);
+    const mockWooCommerceRepo =
+      createMockWooCommerceRepository(wooCommerceCourses);
 
-    const useCase = new CompareCourseUseCase(mockScrapedRepo, mockWooCommerceRepo);
+    const useCase = new CompareCourseUseCase(
+      mockScrapedRepo,
+      mockWooCommerceRepo,
+    );
     const result = await useCase.execute();
 
     expect(result.metadata.sources.scraped.count).toBe(3);
@@ -213,16 +269,24 @@ describe("CompareCourseUseCase", () => {
   });
 
   it("deve executar comparação filtrada por categoria", async () => {
-    const filteredScraped = scrapedCourses.filter(c => c.category === "Educação");
-    const filteredWooCommerce = wooCommerceCourses.filter(c => c.category === "Educação");
+    const filteredScraped = scrapedCourses.filter(
+      c => c.category === "Educação",
+    );
+    const filteredWooCommerce = wooCommerceCourses.filter(
+      c => c.category === "Educação",
+    );
 
     const mockScrapedRepo = createMockScrapedRepository(scrapedCourses);
     mockScrapedRepo.findByCategory.mockResolvedValue(filteredScraped);
 
-    const mockWooCommerceRepo = createMockWooCommerceRepository(wooCommerceCourses);
+    const mockWooCommerceRepo =
+      createMockWooCommerceRepository(wooCommerceCourses);
     mockWooCommerceRepo.findByCategory.mockResolvedValue(filteredWooCommerce);
 
-    const useCase = new CompareCourseUseCase(mockScrapedRepo, mockWooCommerceRepo);
+    const useCase = new CompareCourseUseCase(
+      mockScrapedRepo,
+      mockWooCommerceRepo,
+    );
     const result = await useCase.executeByCategory("Educação");
 
     expect(result.metadata.filterCategory).toBe("Educação");
@@ -243,9 +307,13 @@ describe("GetMissingCoursesUseCase", () => {
 
   it("deve retornar cursos ausentes no WooCommerce", async () => {
     const mockScrapedRepo = createMockScrapedRepository(scrapedCourses);
-    const mockWooCommerceRepo = createMockWooCommerceRepository(wooCommerceCourses);
+    const mockWooCommerceRepo =
+      createMockWooCommerceRepository(wooCommerceCourses);
 
-    const useCase = new GetMissingCoursesUseCase(mockScrapedRepo, mockWooCommerceRepo);
+    const useCase = new GetMissingCoursesUseCase(
+      mockScrapedRepo,
+      mockWooCommerceRepo,
+    );
     const result = await useCase.execute({});
 
     expect(result.missingCourses).toHaveLength(1);
@@ -259,10 +327,15 @@ describe("GetMissingCoursesUseCase", () => {
       { title: "Ausente 3", category: "Saúde" },
     ];
 
-    const mockScrapedRepo = createMockScrapedRepository(scrapedWithMultipleMissing);
+    const mockScrapedRepo = createMockScrapedRepository(
+      scrapedWithMultipleMissing,
+    );
     const mockWooCommerceRepo = createMockWooCommerceRepository([]);
 
-    const useCase = new GetMissingCoursesUseCase(mockScrapedRepo, mockWooCommerceRepo);
+    const useCase = new GetMissingCoursesUseCase(
+      mockScrapedRepo,
+      mockWooCommerceRepo,
+    );
     const result = await useCase.execute({ groupByCategory: true });
 
     expect(result.groupedByCategory).toBeDefined();
@@ -272,9 +345,13 @@ describe("GetMissingCoursesUseCase", () => {
 
   it("deve incluir estatísticas", async () => {
     const mockScrapedRepo = createMockScrapedRepository(scrapedCourses);
-    const mockWooCommerceRepo = createMockWooCommerceRepository(wooCommerceCourses);
+    const mockWooCommerceRepo =
+      createMockWooCommerceRepository(wooCommerceCourses);
 
-    const useCase = new GetMissingCoursesUseCase(mockScrapedRepo, mockWooCommerceRepo);
+    const useCase = new GetMissingCoursesUseCase(
+      mockScrapedRepo,
+      mockWooCommerceRepo,
+    );
     const result = await useCase.execute({});
 
     expect(result.statistics).toBeDefined();
