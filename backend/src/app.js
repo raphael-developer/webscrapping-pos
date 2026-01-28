@@ -7,12 +7,20 @@ const http = require("http");
 const { Server } = require("socket.io");
 const Logger = require("./utils/Logger");
 const config = require("./config");
+
+// Clean Architecture - Presentation Layer Routes
+const courseRoutes = require("./presentation/routes/courseRoutes");
+const comparisonRoutes = require("./presentation/routes/comparisonRoutes");
+
+// Legacy routes (mantidos para compatibilidade durante migração)
+const createScraperRoutes = require("./routes/scraperRoutes");
 const {
-  router: courseRoutes,
+  router: legacyCourseRoutes,
   courseController,
 } = require("./routes/courseRoutes");
-const createScraperRoutes = require("./routes/scraperRoutes");
-const comparisonRoutes = require("./presentation/routes/comparisonRoutes");
+
+// Dependency Injection Container
+const { getContainer } = require("./infrastructure/DIContainer");
 
 class App {
   constructor() {
@@ -27,6 +35,9 @@ class App {
     this.port = config.server.port;
     this.isShuttingDown = false;
     this.connections = new Set();
+
+    // Inicializar DI Container com Socket.IO
+    this.container = getContainer(this.io);
 
     this.setupMiddlewares();
     this.setupRoutes();
@@ -74,18 +85,23 @@ class App {
         status: "OK",
         timestamp: new Date().toISOString(),
         uptime: process.uptime(),
+        architecture: "Clean Architecture",
       });
     });
 
-    // API routes
+    // ===== Clean Architecture Routes =====
+    // Cursos (nova arquitetura)
     this.app.use("/api/courses", courseRoutes);
+    
+    // Comparação WooCommerce
+    this.app.use("/api/comparison", comparisonRoutes);
+
+    // ===== Legacy Routes (compatibilidade) =====
+    // Scraper (ainda usa arquitetura antiga)
     this.app.use(
       "/api/scraper",
       createScraperRoutes(courseController.courseService, this.io),
     );
-
-    // WooCommerce Comparison routes
-    this.app.use("/api/comparison", comparisonRoutes);
 
     // 404 handler
     this.app.use("*", (req, res) => {

@@ -151,6 +151,60 @@ class ScrapedCourseRepository {
   }
 
   /**
+   * Obtém lista de nomes de categorias únicas (implementa IScrapedCourseRepository)
+   * @returns {Promise<Array<string>>}
+   */
+  async findAllCategories() {
+    const categories = await this.getCategories();
+    return categories.map(cat => cat.name || cat);
+  }
+
+  /**
+   * Busca cursos por título (alias para findByName)
+   * @param {string} title
+   * @returns {Promise<Array<ScrapedCourse>>}
+   */
+  async findByTitle(title) {
+    return this.findByName(title);
+  }
+
+  /**
+   * Salva todos os cursos (substitui arquivo)
+   * @param {Array} courses
+   * @returns {Promise<{savedCount: number, timestamp: Date}>}
+   */
+  async saveAll(courses) {
+    const fs = require("fs").promises;
+    const content = JSON.stringify(courses, null, 2);
+    await fs.writeFile(this.filePath, content, "utf-8");
+    this.clearCache();
+    return {
+      savedCount: courses.length,
+      timestamp: new Date(),
+    };
+  }
+
+  /**
+   * Cria backup dos dados atuais
+   * @param {string} [suffix]
+   * @returns {Promise<string>}
+   */
+  async createBackup(suffix = null) {
+    const fs = require("fs").promises;
+    const path = require("path");
+    
+    const timestamp = suffix || Date.now();
+    const backupDir = path.join(path.dirname(this.filePath), "backups");
+    const backupPath = path.join(backupDir, `backup-${timestamp}.json`);
+    
+    await fs.mkdir(backupDir, { recursive: true });
+    const content = await fs.readFile(this.filePath, "utf-8");
+    await fs.writeFile(backupPath, content, "utf-8");
+    
+    return backupPath;
+  }
+
+  /**
    * Obtém estatísticas gerais
    * @returns {Promise<Object>}
    */

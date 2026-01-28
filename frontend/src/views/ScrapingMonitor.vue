@@ -207,18 +207,25 @@
               size="small"
               class="ml-2"
               @click="clearLogs"
+              title="Limpar logs"
             >
               <v-icon>mdi-delete</v-icon>
             </v-btn>
-            <v-btn
-              icon
-              variant="text"
-              size="small"
-              @click="autoScroll = !autoScroll"
-              :color="autoScroll ? 'primary' : ''"
-            >
-              <v-icon>{{ autoScroll ? 'mdi-arrow-down-bold' : 'mdi-arrow-down' }}</v-icon>
-            </v-btn>
+            <v-tooltip location="bottom">
+              <template v-slot:activator="{ props }">
+                <v-btn
+                  icon
+                  variant="text"
+                  size="small"
+                  @click="autoScroll = !autoScroll"
+                  :color="autoScroll ? 'primary' : ''"
+                  v-bind="props"
+                >
+                  <v-icon>{{ autoScroll ? 'mdi-arrow-down-bold' : 'mdi-arrow-down' }}</v-icon>
+                </v-btn>
+              </template>
+              <span>{{ autoScroll ? 'Auto-scroll ativo: novos logs aparecem automaticamente' : 'Auto-scroll desativado: clique para ativar' }}</span>
+            </v-tooltip>
           </v-card-title>
           <v-card-text>
             <div

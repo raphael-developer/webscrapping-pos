@@ -27,6 +27,19 @@
       </v-col>
     </v-row>
 
+    <!-- Snackbar de feedback -->
+    <v-snackbar
+      v-model="snackbar.show"
+      :color="snackbar.color"
+      :timeout="3000"
+      location="top"
+    >
+      {{ snackbar.text }}
+      <template v-slot:actions>
+        <v-btn variant="text" @click="snackbar.show = false">Fechar</v-btn>
+      </template>
+    </v-snackbar>
+
     <!-- Error Alert -->
     <v-alert
       v-if="error"
@@ -139,6 +152,8 @@
                   variant="outlined"
                   color="primary"
                   @click="exportCSV"
+                  :loading="exporting"
+                  :disabled="!comparisonResult?.onlyInSite?.length"
                   prepend-icon="mdi-download"
                 >
                   Exportar CSV
@@ -275,6 +290,21 @@
         </v-card>
       </v-col>
     </v-row>
+
+    <!-- Snackbar de Feedback -->
+    <v-snackbar
+      v-model="snackbar.show"
+      :color="snackbar.color"
+      :timeout="3000"
+      location="bottom right"
+    >
+      {{ snackbar.text }}
+      <template v-slot:actions>
+        <v-btn variant="text" @click="snackbar.show = false">
+          Fechar
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -287,10 +317,16 @@ export default {
   data() {
     return {
       loading: false,
+      exporting: false,
       error: null,
       comparisonResult: null,
       activeTab: 'missing',
       searchMissing: '',
+      snackbar: {
+        show: false,
+        text: '',
+        color: 'success',
+      },
       missingHeaders: [
         { title: 'Nome', key: 'name', sortable: true },
         { title: 'Categoria', key: 'category', sortable: true },
@@ -334,20 +370,50 @@ export default {
     },
 
     async exportCSV() {
+      if (!this.comparisonResult?.onlyInSite?.length) {
+        this.snackbar = {
+          show: true,
+          text: 'Não há cursos ausentes para exportar. Execute a comparação primeiro.',
+          color: 'warning',
+        };
+        return;
+      }
+
       try {
+        this.exporting = true;
         const response = await api.exportMissingCSV();
 
-        const url = window.URL.createObjectURL(new Blob([response.data]));
+        // Verificar se a resposta é válida (blob tem propriedade size)
+        if (!response.data || (response.data.size !== undefined && response.data.size === 0)) {
+          throw new Error('Arquivo CSV vazio recebido');
+        }
+
+        // Criar blob e fazer download
+        const blob = new Blob([response.data], { type: 'text/csv;charset=utf-8;' });
+        const url = window.URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
         link.setAttribute('download', `cursos-ausentes-${new Date().toISOString().split('T')[0]}.csv`);
         document.body.appendChild(link);
         link.click();
-        link.remove();
+        document.body.removeChild(link);
         window.URL.revokeObjectURL(url);
+        
+        // Feedback de sucesso
+        this.snackbar = {
+          show: true,
+          text: 'CSV exportado com sucesso!',
+          color: 'success',
+        };
       } catch (err) {
         console.error('Erro ao exportar:', err);
-        this.error = 'Erro ao exportar CSV';
+        this.snackbar = {
+          show: true,
+          text: err.response?.data?.message || err.message || 'Erro ao exportar CSV. Tente novamente.',
+          color: 'error',
+        };
+      } finally {
+        this.exporting = false;
       }
     },
   },

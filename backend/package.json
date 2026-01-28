@@ -4,7 +4,11 @@
   "scripts": {
     "dev": "node ../kill-port.js 3000 && npx nodemon src/server.js",
     "start": "node src/server.js",
-    "test": "node src/tests/unit.test.js",
+    "test": "jest --coverage",
+    "test:watch": "jest --watch",
+    "test:unit": "jest src/tests/unit.test.js",
+    "test:domain": "jest src/tests/domain-services.test.js",
+    "test:usecases": "jest src/tests/use-cases.test.js",
     "scrape": "node src/scripts/scraper.js",
     "full:scrape": "node src/scripts/full-scrape-count.js",
     "scrape:categories": "node src/scripts/scrape-by-categories.js",
@@ -28,6 +32,20 @@
     "winston": "^3.11.0"
   },
   "devDependencies": {
+    "jest": "^29.7.0",
     "nodemon": "^3.1.10"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coverageDirectory": "coverage",
+    "collectCoverageFrom": [
+      "src/domain/**/*.js",
+      "src/application/**/*.js",
+      "!src/**/*.test.js"
+    ],
+    "testMatch": [
+      "**/tests/**/*.test.js"
+    ],
+    "verbose": true
   }
 }

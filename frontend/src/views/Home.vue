@@ -73,11 +73,18 @@ const courses = computed(() => store.state.courses?.courses || [])
 const categories = computed(() => store.state.categories?.categories || [])
 const loading = computed(() => store.state.courses?.loading || false)
 
+// Calcular modalidades únicas dinamicamente
+const uniqueModalities = computed(() => {
+  if (!Array.isArray(courses.value)) return 1
+  const modalities = new Set(courses.value.map(c => c.modality || 'EAD'))
+  return modalities.size || 1
+})
+
 const statistics = computed(() => [
   { title: 'Total de Cursos', value: Array.isArray(courses.value) ? courses.value.length : 0, icon: 'mdi-book', color: 'primary' },
   { title: 'Categorias', value: Array.isArray(categories.value) ? categories.value.length : 0, icon: 'mdi-folder', color: 'success' },
-  { title: 'Modalidades', value: 3, icon: 'mdi-school', color: 'warning' },
-  { title: 'Avaliação', value: '4.8', icon: 'mdi-star', color: 'error' }
+  { title: 'Modalidades', value: uniqueModalities.value, icon: 'mdi-school', color: 'warning' },
+  { title: 'Qualidade', value: 'Certificada', icon: 'mdi-shield-check', color: 'info' }
 ])
 
 

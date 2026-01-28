@@ -414,7 +414,42 @@ class ScraperController {
 
   async getScrapingStatus(req, res) {
     try {
-      const stats = this.courseService.getStatistics();
+      // Carregar estatísticas diretamente do arquivo de cursos
+      const fs = require("fs").promises;
+      const path = require("path");
+      const cursosFile =
+        process.env.COURSES_DATA_FILE ||
+        path.join(__dirname, "../../cursos-completo-novo.json");
+
+      let stats = {
+        totalCourses: 0,
+        totalCategories: 0,
+        categories: [],
+        coursesByCategory: {},
+      };
+
+      try {
+        const coursesData = await fs.readFile(cursosFile, "utf8");
+        const courses = JSON.parse(coursesData);
+        
+        if (Array.isArray(courses)) {
+          const categories = [...new Set(courses.map(course => course.category))];
+          stats = {
+            totalCourses: courses.length,
+            totalCategories: categories.length,
+            categories: categories,
+            coursesByCategory: categories.reduce((acc, category) => {
+              acc[category] = courses.filter(
+                course => course.category === category,
+              ).length;
+              return acc;
+            }, {}),
+          };
+        }
+      } catch (fileError) {
+        Logger.warn("Arquivo de cursos não encontrado, usando valores padrão");
+      }
+
       res.json({
         success: true,
         data: {
