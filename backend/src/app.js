@@ -12,6 +12,7 @@ const {
   courseController,
 } = require("./routes/courseRoutes");
 const createScraperRoutes = require("./routes/scraperRoutes");
+const comparisonRoutes = require("./presentation/routes/comparisonRoutes");
 
 class App {
   constructor() {
@@ -82,6 +83,9 @@ class App {
       "/api/scraper",
       createScraperRoutes(courseController.courseService, this.io),
     );
+
+    // WooCommerce Comparison routes
+    this.app.use("/api/comparison", comparisonRoutes);
 
     // 404 handler
     this.app.use("*", (req, res) => {

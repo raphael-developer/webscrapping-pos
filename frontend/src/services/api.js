@@ -34,4 +34,22 @@ export default {
   // Scraper
   startScraping: () => api.post("/scraper/start"),
   getScrapingStatus: () => api.get("/scraper/status"),
+
+  // WooCommerce Comparison (timeout maior pois busca dados externos)
+  getComparison: (params = {}) =>
+    api.get("/comparison", { params, timeout: 120000 }),
+  getMissingCourses: (params = {}) =>
+    api.get("/comparison/missing", { params, timeout: 120000 }),
+  getMissingReport: () =>
+    api.get("/comparison/missing/report", { timeout: 120000 }),
+  exportMissingCSV: () =>
+    api.get("/comparison/missing/export", {
+      responseType: "blob",
+      timeout: 120000,
+    }),
+  getSyncPlan: () => api.get("/comparison/sync", { timeout: 120000 }),
+  getWooCommerceStats: () =>
+    api.get("/comparison/woocommerce/stats", { timeout: 60000 }),
+  getScrapedStats: () => api.get("/comparison/scraped/stats"),
+  refreshComparisonCache: () => api.post("/comparison/refresh"),
 };

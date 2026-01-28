@@ -43,6 +43,14 @@ const routes = [
     },
   },
   {
+    path: "/comparison",
+    name: "WooCommerceComparison",
+    component: () => import("@/views/WooCommerceComparison.vue"),
+    meta: {
+      title: "Comparação WooCommerce",
+    },
+  },
+  {
     path: "/:pathMatch(.*)*",
     name: "NotFound",
     component: () => import("@/views/NotFound.vue"),

@@ -72,6 +72,19 @@ npm run dev
 | GET | `/api/scraper/status` | Status do scraping |
 | GET | `/api/scraper/report` | Relatório de cursos novos |
 
+### Comparação WooCommerce
+
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| GET | `/api/comparison` | Comparar cursos scraped vs WooCommerce |
+| GET | `/api/comparison/missing` | Cursos ausentes no WooCommerce |
+| GET | `/api/comparison/missing/report` | Relatório de cursos ausentes |
+| GET | `/api/comparison/missing/export` | Exportar ausentes em CSV |
+| GET | `/api/comparison/sync` | Plano de sincronização |
+| GET | `/api/comparison/woocommerce/stats` | Estatísticas do WooCommerce |
+| GET | `/api/comparison/scraped/stats` | Estatísticas dos cursos scraped |
+| POST | `/api/comparison/refresh` | Limpar cache |
+
 ### Health Check
 
 | Método | Endpoint | Descrição |
@@ -122,9 +135,57 @@ SCRAPER_CONCURRENCY=1
 SCRAPER_FORCE_HEADLESS=1
 SCRAPER_BLOCK_RESOURCES=1
 
+# WooCommerce API
+WOOCOMMERCE_URL=https://unicaposead.com
+WOOCOMMERCE_CONSUMER_KEY=ck_xxxx
+WOOCOMMERCE_CONSUMER_SECRET=cs_xxxx
+
 # Rate Limiting
 RATE_LIMIT_MAX=100
 ```
+
+## Arquitetura Clean para WooCommerce
+
+A integração WooCommerce segue Clean Architecture:
+
+```
+backend/src/
+├── domain/                    # Regras de Negócio Puras
+│   ├── entities/              # Entidades de domínio
+│   │   ├── WooCommerceCourse.js
+│   │   └── ScrapedCourse.js
+│   ├── repositories/          # Interfaces de repositório
+│   │   ├── IWooCommerceRepository.js
+│   │   └── IScrapedCourseRepository.js
+│   └── services/              # Serviços de domínio
+│       └── CourseComparisonService.js
+├── application/               # Casos de Uso
+│   ├── use-cases/
+│   │   ├── CompareCourseUseCase.js
+│   │   ├── GetMissingCoursesUseCase.js
+│   │   └── SyncCoursesUseCase.js
+│   └── dtos/
+│       └── ComparisonResultDTO.js
+├── infrastructure/            # Implementações Externas
+│   ├── woocommerce/
+│   │   ├── WooCommerceClient.js
+│   │   └── WooCommerceRepository.js
+│   └── repositories/
+│       └── ScrapedCourseRepository.js
+└── presentation/              # Interface HTTP
+    ├── controllers/
+    │   └── ComparisonController.js
+    └── routes/
+        └── comparisonRoutes.js
+```
+
+### Princípios SOLID Aplicados
+
+- **S**ingle Responsibility: Cada classe tem uma única responsabilidade
+- **O**pen/Closed: Extensível via interfaces, fechado para modificação
+- **L**iskov Substitution: Repositórios podem ser substituídos por mocks
+- **I**nterface Segregation: Interfaces específicas para cada contexto
+- **D**ependency Inversion: Use cases dependem de abstrações, não implementações
 
 ## Testes
 

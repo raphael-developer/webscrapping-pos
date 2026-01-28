@@ -87,6 +87,15 @@ const config = {
       "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0 Safari/537.36",
   },
 
+  // WooCommerce API
+  woocommerce: {
+    url: process.env.WOOCOMMERCE_URL || "https://unicaposead.com",
+    consumerKey: process.env.WOOCOMMERCE_CONSUMER_KEY || "",
+    consumerSecret: process.env.WOOCOMMERCE_CONSUMER_SECRET || "",
+    timeout: parseInt(process.env.WOOCOMMERCE_TIMEOUT, 10) || 30000,
+    version: process.env.WOOCOMMERCE_API_VERSION || "wc/v3",
+  },
+
   // Rate Limiting
   rateLimit: {
     windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS, 10) || 60000, // 1 minuto
@@ -144,6 +153,13 @@ const validate = () => {
 
   if (config.scraper.concurrency < 1 || config.scraper.concurrency > 10) {
     errors.push("SCRAPER_CONCURRENCY deve ser entre 1 e 10");
+  }
+
+  // Aviso (não erro) para WooCommerce
+  if (!config.woocommerce.consumerKey || !config.woocommerce.consumerSecret) {
+    console.warn(
+      "[Config] WooCommerce: Credenciais não configuradas. Funcionalidades de comparação estarão desabilitadas.",
+    );
   }
 
   if (errors.length > 0) {
