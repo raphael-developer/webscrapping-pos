@@ -21,15 +21,27 @@ const actions = {
       dispatch("clearError", null, { root: true });
 
       const response = await ApiService.getCategories();
-      // Se o backend retorna um array direto
+      
+      // Suporta múltiplos formatos de resposta:
+      // 1. Array direto: ["cat1", "cat2"]
+      // 2. Objeto com success: { success: true, data: [...], total: N }
+      // 3. Objeto com categories: { categories: [...] }
+      let categories = [];
+      
       if (Array.isArray(response.data)) {
-        commit("SET_CATEGORIES", response.data);
-      } else if (response.data && response.data.success) {
-        commit("SET_CATEGORIES", response.data.categories);
+        categories = response.data;
+      } else if (response.data?.success && Array.isArray(response.data.data)) {
+        categories = response.data.data;
+      } else if (response.data?.categories && Array.isArray(response.data.categories)) {
+        categories = response.data.categories;
       } else {
-        throw new Error(response.message || "Erro ao buscar categorias");
+        console.warn("Formato de categorias inesperado:", response.data);
+        categories = [];
       }
+      
+      commit("SET_CATEGORIES", categories);
     } catch (error) {
+      console.error("Erro ao buscar categorias:", error);
       dispatch("setError", error.message, { root: true });
       throw error;
     } finally {

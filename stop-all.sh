@@ -11,7 +11,7 @@ FRONT_PID_FILE="$ROOT/.frontend.pid"
 
 # Portas utilizadas
 BACKEND_PORT=3000
-FRONTEND_PORT=8081
+FRONTEND_PORT=8080
 
 echo "Parando serviços..."
 

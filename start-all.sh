@@ -15,7 +15,7 @@ PIDS_FILE="$ROOT/.start-all-pids"
 
 # Portas utilizadas
 BACKEND_PORT=3000
-FRONTEND_PORT=8081
+FRONTEND_PORT=8080
 
 INSTALL=false
 NO_WAIT=false

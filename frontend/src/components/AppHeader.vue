@@ -7,7 +7,7 @@
   >
     <v-app-bar-nav-icon @click="toggleDrawer"></v-app-bar-nav-icon>
     
-    <v-toolbar-title>
+    <v-toolbar-title class="cursor-pointer" @click="goHome">
       <v-icon class="mr-2">mdi-school</v-icon>
       Faculdade Única
     </v-toolbar-title>
@@ -21,13 +21,16 @@
       prepend-inner-icon="mdi-magnify"
       variant="outlined"
       density="compact"
-      class="mr-4"
+      class="mr-4 search-field"
       style="max-width: 300px;"
+      clearable
       @keyup.enter="performSearch"
+      @click:prepend-inner="performSearch"
+      @click:clear="clearSearch"
     ></v-text-field>
 
-    <v-btn icon>
-      <v-icon>mdi-bell</v-icon>
+    <v-btn icon @click="performSearch" title="Buscar">
+      <v-icon>mdi-magnify</v-icon>
     </v-btn>
   </v-app-bar>
 </template>
@@ -45,9 +48,35 @@ const toggleDrawer = () => {
   emit('toggle-drawer')
 }
 
+const goHome = () => {
+  router.push({ name: 'Home' })
+}
+
 const performSearch = () => {
-  if (search.value.trim()) {
-    router.push({ name: 'Home', query: { search: search.value } })
+  if (search.value && search.value.trim()) {
+    router.push({ name: 'AllCourses', query: { search: search.value.trim() } })
   }
 }
+
+const clearSearch = () => {
+  search.value = ''
+}
 </script>
+
+<style scoped>
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.cursor-pointer:hover {
+  opacity: 0.9;
+}
+
+.search-field {
+  transition: all 0.2s;
+}
+
+.search-field:focus-within {
+  max-width: 350px !important;
+}
+</style>

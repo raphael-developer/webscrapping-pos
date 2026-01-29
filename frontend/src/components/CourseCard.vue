@@ -193,11 +193,6 @@ const toggleFavorite = () => {
   
   saveFavorites(favorites)
 }
-}
-
-const toggleFavorite = () => {
-  isFavorite.value = !isFavorite.value
-}
 
 const shareCourse = () => {
   const shareUrl = window.location.origin + `/course/${props.course.id}`

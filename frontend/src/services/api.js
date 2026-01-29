@@ -2,7 +2,7 @@ import axios from "axios";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || "http://localhost:3000/api",
-  timeout: 10000,
+  timeout: 30000,
 });
 
 // Interceptor para debug
@@ -24,10 +24,10 @@ api.interceptors.response.use(
 );
 
 export default {
-  // Courses
-  getCourses: (params = {}) => api.get("/courses", { params }),
+  // Courses (timeout maior para carregar todos os 880 cursos)
+  getCourses: (params = {}) => api.get("/courses", { params, timeout: 60000 }),
   getCourse: id => api.get(`/courses/${id}`),
-  getCoursesByCategory: category => api.get(`/courses/category/${category}`),
+  getCoursesByCategory: category => api.get(`/courses/category/${category}`, { timeout: 60000 }),
   getCategories: () => api.get("/courses/categories"),
   getStatistics: () => api.get("/courses/statistics"),
 

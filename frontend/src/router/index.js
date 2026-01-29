@@ -11,6 +11,14 @@ const routes = [
     },
   },
   {
+    path: "/cursos",
+    name: "AllCourses",
+    component: () => import("@/views/AllCourses.vue"),
+    meta: {
+      title: "Todos os Cursos",
+    },
+  },
+  {
     path: "/curso/:id",
     name: "CourseDetail",
     component: () => import("@/views/CourseDetail.vue"),

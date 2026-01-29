@@ -52,6 +52,7 @@ const props = defineProps({
 
 const menuItems = [
   { title: 'Início', icon: 'mdi-home', to: '/' },
+  { title: 'Todos os Cursos', icon: 'mdi-book-multiple', to: '/cursos' },
   { title: 'Administração', icon: 'mdi-cog', to: '/admin' },
   { title: 'Monitor Scraping', icon: 'mdi-chart-timeline-variant', to: '/monitor' },
   { title: 'Comparação WooCommerce', icon: 'mdi-compare', to: '/comparison' }

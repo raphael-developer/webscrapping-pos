@@ -42,6 +42,32 @@ class GetCoursesUseCase {
       courses = await this.courseRepository.findAll();
     }
 
+    // Se não pedir paginação explicitamente, retorna todos
+    const usePagination = filters.page || filters.pageSize;
+    
+    if (!usePagination) {
+      // Retorna todos os cursos sem paginação
+      const finalCourses = filters.limit
+        ? courses.slice(0, parseInt(filters.limit))
+        : courses;
+
+      return {
+        courses: finalCourses.map(course => this.toDTO(course)),
+        pagination: {
+          page: 1,
+          pageSize: finalCourses.length,
+          totalItems: courses.length,
+          totalPages: 1,
+          hasNextPage: false,
+          hasPreviousPage: false,
+        },
+        filters: {
+          category: filters.category || null,
+          search: filters.search || null,
+        },
+      };
+    }
+
     // Paginação
     const page = Math.max(1, parseInt(filters.page) || 1);
     const pageSize = Math.min(
