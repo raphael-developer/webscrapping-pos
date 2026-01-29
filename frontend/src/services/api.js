@@ -27,7 +27,8 @@ export default {
   // Courses (timeout maior para carregar todos os 880 cursos)
   getCourses: (params = {}) => api.get("/courses", { params, timeout: 60000 }),
   getCourse: id => api.get(`/courses/${id}`),
-  getCoursesByCategory: category => api.get(`/courses/category/${category}`, { timeout: 60000 }),
+  getCoursesByCategory: category =>
+    api.get(`/courses/category/${category}`, { timeout: 60000 }),
   getCategories: () => api.get("/courses/categories"),
   getStatistics: () => api.get("/courses/statistics"),
 
