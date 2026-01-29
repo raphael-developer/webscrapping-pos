@@ -14,33 +14,25 @@
 
     <v-spacer></v-spacer>
 
-    <v-text-field
-      v-model="search"
-      hide-details
-      placeholder="Buscar cursos..."
-      prepend-inner-icon="mdi-magnify"
-      variant="outlined"
-      density="compact"
-      class="mr-4 search-field"
-      style="max-width: 300px;"
-      clearable
-      @keyup.enter="performSearch"
-      @click:prepend-inner="performSearch"
-      @click:clear="clearSearch"
-    ></v-text-field>
-
-    <v-btn icon @click="performSearch" title="Buscar">
-      <v-icon>mdi-magnify</v-icon>
-    </v-btn>
+    <!-- Busca com Autocomplete -->
+    <SearchAutocomplete
+      placeholder="Buscar cursos ou categorias..."
+      results-width="450px"
+      :min-chars="2"
+      :debounce-ms="300"
+      class="header-search mx-2"
+      @select-course="onSelectCourse"
+      @select-category="onSelectCategory"
+      @search="onSearch"
+    />
   </v-app-bar>
 </template>
 
 <script setup>
-import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import SearchAutocomplete from '@/components/SearchAutocomplete.vue'
 
 const router = useRouter()
-const search = ref('')
 
 const emit = defineEmits(['toggle-drawer'])
 
@@ -52,14 +44,16 @@ const goHome = () => {
   router.push({ name: 'Home' })
 }
 
-const performSearch = () => {
-  if (search.value && search.value.trim()) {
-    router.push({ name: 'AllCourses', query: { search: search.value.trim() } })
-  }
+const onSelectCourse = (course) => {
+  console.log('Curso selecionado:', course.name)
 }
 
-const clearSearch = () => {
-  search.value = ''
+const onSelectCategory = (category) => {
+  console.log('Categoria selecionada:', category.name)
+}
+
+const onSearch = (query) => {
+  console.log('Busca:', query)
 }
 </script>
 
@@ -72,11 +66,17 @@ const clearSearch = () => {
   opacity: 0.9;
 }
 
-.search-field {
-  transition: all 0.2s;
+.header-search {
+  flex: 0 1 400px;
+  min-width: 250px;
+  max-width: 450px;
 }
 
-.search-field:focus-within {
-  max-width: 350px !important;
+@media (max-width: 768px) {
+  .header-search {
+    flex: 1;
+    min-width: 200px;
+    max-width: 100%;
+  }
 }
 </style>

@@ -47,10 +47,25 @@
       <!-- Stats Cards -->
       <v-row v-else>
         <v-col v-for="stat in statistics" :key="stat.title" cols="12" sm="6" md="3">
-          <v-card class="text-center pa-4 stat-card" elevation="2" :class="{ 'clickable': stat.route }" @click="stat.route && router.push(stat.route)">
+          <v-card 
+            class="text-center pa-4 stat-card" 
+            elevation="2" 
+            :class="{ 'clickable': stat.route }" 
+            @click="handleStatClick(stat)"
+            :ripple="!!stat.route"
+          >
             <v-icon size="48" :color="stat.color" class="mb-2">{{ stat.icon }}</v-icon>
             <h3 class="text-h4 font-weight-bold">{{ stat.value }}</h3>
             <p class="text-subtitle-1 mb-0">{{ stat.title }}</p>
+            <v-chip 
+              v-if="stat.route" 
+              size="x-small" 
+              color="grey-lighten-2" 
+              class="mt-2"
+            >
+              <v-icon size="12" start>mdi-cursor-default-click</v-icon>
+              Clique para ver
+            </v-chip>
           </v-card>
         </v-col>
       </v-row>
@@ -230,28 +245,33 @@ const statistics = computed(() => [
     value: totalCourses.value, 
     icon: 'mdi-book-multiple', 
     color: 'primary',
-    route: { name: 'Admin' }
+    route: { name: 'AllCourses' },
+    description: 'Ver todos os cursos'
   },
   { 
     title: 'Categorias', 
     value: statsData.value.totalCategories || categories.value.length, 
     icon: 'mdi-folder-multiple', 
     color: 'success',
-    route: null
+    route: null,
+    action: 'scrollToCategories',
+    description: 'Ver categorias'
   },
   { 
     title: 'Modalidades', 
     value: uniqueModalities.value, 
     icon: 'mdi-school', 
     color: 'warning',
-    route: null
+    route: null,
+    description: null
   },
   { 
     title: 'Status', 
     value: totalCourses.value > 0 ? 'Online' : 'Offline', 
     icon: totalCourses.value > 0 ? 'mdi-check-circle' : 'mdi-alert-circle', 
     color: totalCourses.value > 0 ? 'info' : 'error',
-    route: { name: 'ScrapingMonitor' }
+    route: { name: 'ScrapingMonitor' },
+    description: 'Ver monitor'
   }
 ])
 
@@ -259,6 +279,20 @@ const statistics = computed(() => [
 const scrollToCourses = () => {
   if (coursesSection.value) {
     coursesSection.value.scrollIntoView({ behavior: 'smooth' })
+  }
+}
+
+const scrollToCategories = () => {
+  if (coursesSection.value) {
+    coursesSection.value.scrollIntoView({ behavior: 'smooth' })
+  }
+}
+
+const handleStatClick = (stat) => {
+  if (stat.route) {
+    router.push(stat.route)
+  } else if (stat.action === 'scrollToCategories') {
+    scrollToCategories()
   }
 }
 
@@ -344,6 +378,10 @@ onMounted(() => {
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
+.stat-card {
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
 .stat-card.clickable {
   cursor: pointer;
 }
@@ -351,6 +389,11 @@ onMounted(() => {
 .stat-card.clickable:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(var(--v-theme-primary), 0.3);
+}
+
+.stat-card.clickable:active {
+  transform: translateY(-2px);
 }
 
 .nav-card {
@@ -367,11 +410,17 @@ onMounted(() => {
 .category-card {
   cursor: pointer;
   transition: all 0.2s;
+  border: 2px solid transparent;
 }
 
 .category-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(118, 75, 162, 0.2);
-  background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(118, 75, 162, 0.25);
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-color: rgba(var(--v-theme-primary), 0.4);
+}
+
+.category-card:active {
+  transform: translateY(-1px);
 }
 </style>
