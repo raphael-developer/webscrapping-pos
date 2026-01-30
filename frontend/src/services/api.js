@@ -58,8 +58,12 @@ export default {
   // Preparação
   prepareCoursesForRegistration: (params = {}) =>
     api.get("/registration/prepare", { params, timeout: 120000 }),
-  prepareSingleCourse: (scrapedCourseId) =>
-    api.post(`/registration/prepare/${scrapedCourseId}`, {}, { timeout: 60000 }),
+  prepareSingleCourse: scrapedCourseId =>
+    api.post(
+      `/registration/prepare/${scrapedCourseId}`,
+      {},
+      { timeout: 60000 },
+    ),
 
   // Listagem
   getPendingRegistrations: (params = {}) =>
@@ -68,24 +72,28 @@ export default {
     api.get("/registration/approved", { timeout: 60000 }),
   getRegistrationStatistics: () =>
     api.get("/registration/statistics", { timeout: 30000 }),
-  getRegistrationDetails: (id) =>
+  getRegistrationDetails: id =>
     api.get(`/registration/${id}`, { timeout: 30000 }),
 
   // Ações
   updateRegistration: (id, data) =>
     api.put(`/registration/${id}`, data, { timeout: 30000 }),
-  approveRegistration: (id, userId = 'admin') =>
+  approveRegistration: (id, userId = "admin") =>
     api.post(`/registration/${id}/approve`, { userId }, { timeout: 30000 }),
   rejectRegistration: (id, reason) =>
     api.post(`/registration/${id}/reject`, { reason }, { timeout: 30000 }),
-  registerInWooCommerce: (id, userId = 'admin') =>
+  registerInWooCommerce: (id, userId = "admin") =>
     api.post(`/registration/${id}/register`, { userId }, { timeout: 60000 }),
-  deleteRegistration: (id) =>
+  deleteRegistration: id =>
     api.delete(`/registration/${id}`, { timeout: 30000 }),
 
   // Batch
-  registerBatch: (registrationIds, userId = 'admin') =>
-    api.post("/registration/register-batch", { registrationIds, userId }, { timeout: 180000 }),
+  registerBatch: (registrationIds, userId = "admin") =>
+    api.post(
+      "/registration/register-batch",
+      { registrationIds, userId },
+      { timeout: 180000 },
+    ),
 
   // Backup
   exportRegistrations: () =>

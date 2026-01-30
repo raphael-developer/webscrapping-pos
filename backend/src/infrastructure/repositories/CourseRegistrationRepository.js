@@ -6,9 +6,12 @@
  * Pode ser facilmente substituído por implementação com banco de dados.
  */
 
-const fs = require('fs').promises;
-const path = require('path');
-const { CourseRegistration, RegistrationStatus } = require('../../domain/entities/CourseRegistration');
+const fs = require("fs").promises;
+const path = require("path");
+const {
+  CourseRegistration,
+  RegistrationStatus,
+} = require("../../domain/entities/CourseRegistration");
 
 /**
  * Implementação do repositório de registros de cadastro
@@ -19,11 +22,9 @@ class CourseRegistrationRepository {
    * @param {string} storagePath - Caminho para arquivo de armazenamento
    */
   constructor(storagePath) {
-    this.storagePath = storagePath || path.join(
-      process.cwd(), 
-      'data', 
-      'course-registrations.json'
-    );
+    this.storagePath =
+      storagePath ||
+      path.join(process.cwd(), "data", "course-registrations.json");
     this.registrations = new Map();
     this.initialized = false;
   }
@@ -49,24 +50,29 @@ class CourseRegistrationRepository {
       await fs.mkdir(dir, { recursive: true });
 
       // Tentar carregar dados existentes
-      const data = await fs.readFile(this.storagePath, 'utf-8');
+      const data = await fs.readFile(this.storagePath, "utf-8");
       const parsed = JSON.parse(data);
-      
+
       // Reconstruir Map com entidades
       for (const item of parsed) {
         const registration = new CourseRegistration({
           ...item,
           createdAt: new Date(item.createdAt),
           updatedAt: new Date(item.updatedAt),
-          authorizedAt: item.authorizedAt ? new Date(item.authorizedAt) : null
+          authorizedAt: item.authorizedAt ? new Date(item.authorizedAt) : null,
         });
         this.registrations.set(registration.id, registration);
       }
-      
-      console.log(`[CourseRegistrationRepository] Carregados ${this.registrations.size} registros`);
+
+      console.log(
+        `[CourseRegistrationRepository] Carregados ${this.registrations.size} registros`,
+      );
     } catch (error) {
-      if (error.code !== 'ENOENT') {
-        console.error('[CourseRegistrationRepository] Erro ao carregar:', error.message);
+      if (error.code !== "ENOENT") {
+        console.error(
+          "[CourseRegistrationRepository] Erro ao carregar:",
+          error.message,
+        );
       }
       // Arquivo não existe - iniciar vazio
       this.registrations = new Map();
@@ -80,10 +86,15 @@ class CourseRegistrationRepository {
    */
   async persist() {
     try {
-      const data = Array.from(this.registrations.values()).map(r => r.toObject());
+      const data = Array.from(this.registrations.values()).map(r =>
+        r.toObject(),
+      );
       await fs.writeFile(this.storagePath, JSON.stringify(data, null, 2));
     } catch (error) {
-      console.error('[CourseRegistrationRepository] Erro ao persistir:', error.message);
+      console.error(
+        "[CourseRegistrationRepository] Erro ao persistir:",
+        error.message,
+      );
       throw error;
     }
   }
@@ -99,13 +110,15 @@ class CourseRegistrationRepository {
     // Verificar se já existe registro para este curso scraped
     for (const existing of this.registrations.values()) {
       if (existing.scrapedCourseId === registration.scrapedCourseId) {
-        throw new Error(`Já existe registro para curso scraped: ${registration.scrapedCourseId}`);
+        throw new Error(
+          `Já existe registro para curso scraped: ${registration.scrapedCourseId}`,
+        );
       }
     }
 
     this.registrations.set(registration.id, registration);
     await this.persist();
-    
+
     return registration;
   }
 
@@ -127,7 +140,7 @@ class CourseRegistrationRepository {
       ...updates,
       id: existing.id,
       createdAt: existing.createdAt,
-      updatedAt: new Date()
+      updatedAt: new Date(),
     });
 
     this.registrations.set(id, updated);
@@ -162,19 +175,19 @@ class CourseRegistrationRepository {
     }
 
     if (options.category) {
-      results = results.filter(r => 
-        r.category?.toLowerCase() === options.category.toLowerCase()
+      results = results.filter(
+        r => r.category?.toLowerCase() === options.category.toLowerCase(),
       );
     }
 
     // Ordenação
-    const sortBy = options.sortBy || 'createdAt';
-    const order = options.order || 'desc';
+    const sortBy = options.sortBy || "createdAt";
+    const order = options.order || "desc";
     results.sort((a, b) => {
       const aVal = a[sortBy];
       const bVal = b[sortBy];
       const comparison = aVal < bVal ? -1 : aVal > bVal ? 1 : 0;
-      return order === 'desc' ? -comparison : comparison;
+      return order === "desc" ? -comparison : comparison;
     });
 
     // Paginação
@@ -193,8 +206,9 @@ class CourseRegistrationRepository {
    */
   async findByStatus(status) {
     await this.initialize();
-    return Array.from(this.registrations.values())
-      .filter(r => r.registrationStatus === status);
+    return Array.from(this.registrations.values()).filter(
+      r => r.registrationStatus === status,
+    );
   }
 
   /**
@@ -280,7 +294,7 @@ class CourseRegistrationRepository {
       [RegistrationStatus.APPROVED]: 0,
       [RegistrationStatus.REJECTED]: 0,
       [RegistrationStatus.REGISTERED]: 0,
-      [RegistrationStatus.FAILED]: 0
+      [RegistrationStatus.FAILED]: 0,
     };
 
     for (const registration of this.registrations.values()) {
@@ -300,7 +314,7 @@ class CourseRegistrationRepository {
 
     const saved = [];
     const existingScrapedIds = new Set();
-    
+
     // Coletar IDs de cursos scraped existentes
     for (const reg of this.registrations.values()) {
       existingScrapedIds.add(reg.scrapedCourseId);
@@ -337,7 +351,7 @@ class CourseRegistrationRepository {
     // Agrupar por categoria
     const byCategory = {};
     for (const reg of this.registrations.values()) {
-      const cat = reg.category || 'Sem Categoria';
+      const cat = reg.category || "Sem Categoria";
       byCategory[cat] = (byCategory[cat] || 0) + 1;
     }
 
@@ -347,7 +361,7 @@ class CourseRegistrationRepository {
       byCategory: Object.entries(byCategory)
         .map(([name, count]) => ({ name, count }))
         .sort((a, b) => b.count - a.count),
-      lastUpdated: new Date().toISOString()
+      lastUpdated: new Date().toISOString(),
     };
   }
 
@@ -370,7 +384,7 @@ class CourseRegistrationRepository {
     return {
       exportedAt: new Date().toISOString(),
       count: this.registrations.size,
-      data: Array.from(this.registrations.values()).map(r => r.toObject())
+      data: Array.from(this.registrations.values()).map(r => r.toObject()),
     };
   }
 
@@ -396,7 +410,7 @@ class CourseRegistrationRepository {
         ...item,
         createdAt: new Date(item.createdAt),
         updatedAt: new Date(item.updatedAt),
-        authorizedAt: item.authorizedAt ? new Date(item.authorizedAt) : null
+        authorizedAt: item.authorizedAt ? new Date(item.authorizedAt) : null,
       });
 
       this.registrations.set(registration.id, registration);

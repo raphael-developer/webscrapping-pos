@@ -17,7 +17,7 @@ class ICourseRegistrationRepository {
    * @returns {Promise<CourseRegistration>}
    */
   async save(registration) {
-    throw new Error('Method not implemented: save');
+    throw new Error("Method not implemented: save");
   }
 
   /**
@@ -27,7 +27,7 @@ class ICourseRegistrationRepository {
    * @returns {Promise<CourseRegistration>}
    */
   async update(id, updates) {
-    throw new Error('Method not implemented: update');
+    throw new Error("Method not implemented: update");
   }
 
   /**
@@ -36,7 +36,7 @@ class ICourseRegistrationRepository {
    * @returns {Promise<CourseRegistration|null>}
    */
   async findById(id) {
-    throw new Error('Method not implemented: findById');
+    throw new Error("Method not implemented: findById");
   }
 
   /**
@@ -45,7 +45,7 @@ class ICourseRegistrationRepository {
    * @returns {Promise<Array<CourseRegistration>>}
    */
   async findAll(options) {
-    throw new Error('Method not implemented: findAll');
+    throw new Error("Method not implemented: findAll");
   }
 
   /**
@@ -54,7 +54,7 @@ class ICourseRegistrationRepository {
    * @returns {Promise<Array<CourseRegistration>>}
    */
   async findByStatus(status) {
-    throw new Error('Method not implemented: findByStatus');
+    throw new Error("Method not implemented: findByStatus");
   }
 
   /**
@@ -62,7 +62,7 @@ class ICourseRegistrationRepository {
    * @returns {Promise<Array<CourseRegistration>>}
    */
   async findPendingReview() {
-    throw new Error('Method not implemented: findPendingReview');
+    throw new Error("Method not implemented: findPendingReview");
   }
 
   /**
@@ -70,7 +70,7 @@ class ICourseRegistrationRepository {
    * @returns {Promise<Array<CourseRegistration>>}
    */
   async findApproved() {
-    throw new Error('Method not implemented: findApproved');
+    throw new Error("Method not implemented: findApproved");
   }
 
   /**
@@ -79,7 +79,7 @@ class ICourseRegistrationRepository {
    * @returns {Promise<CourseRegistration|null>}
    */
   async findByScrapedCourseId(scrapedCourseId) {
-    throw new Error('Method not implemented: findByScrapedCourseId');
+    throw new Error("Method not implemented: findByScrapedCourseId");
   }
 
   /**
@@ -88,7 +88,7 @@ class ICourseRegistrationRepository {
    * @returns {Promise<boolean>}
    */
   async delete(id) {
-    throw new Error('Method not implemented: delete');
+    throw new Error("Method not implemented: delete");
   }
 
   /**
@@ -97,7 +97,7 @@ class ICourseRegistrationRepository {
    * @returns {Promise<number>} - Quantidade removida
    */
   async deleteMany(ids) {
-    throw new Error('Method not implemented: deleteMany');
+    throw new Error("Method not implemented: deleteMany");
   }
 
   /**
@@ -105,7 +105,7 @@ class ICourseRegistrationRepository {
    * @returns {Promise<Object>}
    */
   async countByStatus() {
-    throw new Error('Method not implemented: countByStatus');
+    throw new Error("Method not implemented: countByStatus");
   }
 
   /**
@@ -114,7 +114,7 @@ class ICourseRegistrationRepository {
    * @returns {Promise<Array<CourseRegistration>>}
    */
   async saveMany(registrations) {
-    throw new Error('Method not implemented: saveMany');
+    throw new Error("Method not implemented: saveMany");
   }
 }
 

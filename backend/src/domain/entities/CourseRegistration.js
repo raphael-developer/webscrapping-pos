@@ -11,11 +11,11 @@
  * Status possíveis do registro de curso
  */
 const RegistrationStatus = {
-  PENDING_REVIEW: 'pending_review',    // Aguardando revisão do usuário
-  APPROVED: 'approved',                 // Aprovado pelo usuário
-  REJECTED: 'rejected',                 // Rejeitado pelo usuário
-  REGISTERED: 'registered',             // Cadastrado com sucesso
-  FAILED: 'failed'                      // Falha no cadastro
+  PENDING_REVIEW: "pending_review", // Aguardando revisão do usuário
+  APPROVED: "approved", // Aprovado pelo usuário
+  REJECTED: "rejected", // Rejeitado pelo usuário
+  REGISTERED: "registered", // Cadastrado com sucesso
+  FAILED: "failed", // Falha no cadastro
 };
 
 /**
@@ -51,8 +51,8 @@ class CourseRegistration {
    */
   constructor(props) {
     // Validação básica
-    if (!props.name || props.name.trim() === '') {
-      throw new Error('Nome do curso é obrigatório');
+    if (!props.name || props.name.trim() === "") {
+      throw new Error("Nome do curso é obrigatório");
     }
 
     this.id = props.id || this.generateId();
@@ -60,19 +60,20 @@ class CourseRegistration {
     this.name = props.name.trim();
     this.slug = props.slug || this.generateSlug(props.name);
     this.category = props.category;
-    this.description = props.description || '';
-    this.shortDescription = props.shortDescription || '';
+    this.description = props.description || "";
+    this.shortDescription = props.shortDescription || "";
     this.duration = props.duration;
-    this.price = props.price || '0';
-    this.regularPrice = props.regularPrice || props.price || '0';
-    this.salePrice = props.salePrice || '';
-    this.imageUrl = props.imageUrl || '';
+    this.price = props.price || "0";
+    this.regularPrice = props.regularPrice || props.price || "0";
+    this.salePrice = props.salePrice || "";
+    this.imageUrl = props.imageUrl || "";
     this.galleryImages = props.galleryImages || [];
-    this.status = props.status || 'draft';
-    this.registrationStatus = props.registrationStatus || RegistrationStatus.PENDING_REVIEW;
+    this.status = props.status || "draft";
+    this.registrationStatus =
+      props.registrationStatus || RegistrationStatus.PENDING_REVIEW;
     this.metadata = props.metadata || {};
     this.customFields = props.customFields || {};
-    this.sourceUrl = props.sourceUrl || '';
+    this.sourceUrl = props.sourceUrl || "";
     this.createdAt = props.createdAt || new Date();
     this.updatedAt = props.updatedAt || new Date();
     this.authorizedBy = props.authorizedBy || null;
@@ -96,11 +97,11 @@ class CourseRegistration {
   generateSlug(name) {
     return name
       .toLowerCase()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .replace(/[^a-z0-9\s-]/g, '')
-      .replace(/\s+/g, '-')
-      .replace(/-+/g, '-')
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9\s-]/g, "")
+      .replace(/\s+/g, "-")
+      .replace(/-+/g, "-")
       .trim();
   }
 
@@ -115,16 +116,17 @@ class CourseRegistration {
       name: scrapedCourse.title || scrapedCourse.name,
       slug: scrapedCourse.slug,
       category: scrapedCourse.category,
-      description: scrapedCourse.description || '',
-      shortDescription: scrapedCourse.shortDescription || scrapedCourse.duration || '',
+      description: scrapedCourse.description || "",
+      shortDescription:
+        scrapedCourse.shortDescription || scrapedCourse.duration || "",
       duration: scrapedCourse.duration,
-      price: '0', // Preço default - usuário define
-      imageUrl: scrapedCourse.image || scrapedCourse.imageUrl || '',
-      sourceUrl: scrapedCourse.url || scrapedCourse.link || '',
+      price: "0", // Preço default - usuário define
+      imageUrl: scrapedCourse.image || scrapedCourse.imageUrl || "",
+      sourceUrl: scrapedCourse.url || scrapedCourse.link || "",
       metadata: {
         originalData: scrapedCourse,
-        scrapedAt: new Date().toISOString()
-      }
+        scrapedAt: new Date().toISOString(),
+      },
     });
   }
 
@@ -137,7 +139,7 @@ class CourseRegistration {
     return new CourseRegistration({
       ...this.toObject(),
       ...updates,
-      updatedAt: new Date()
+      updatedAt: new Date(),
     });
   }
 
@@ -148,7 +150,7 @@ class CourseRegistration {
    */
   approve(userId) {
     if (this.registrationStatus === RegistrationStatus.REGISTERED) {
-      throw new Error('Curso já foi cadastrado');
+      throw new Error("Curso já foi cadastrado");
     }
 
     return new CourseRegistration({
@@ -156,7 +158,7 @@ class CourseRegistration {
       registrationStatus: RegistrationStatus.APPROVED,
       authorizedBy: userId,
       authorizedAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
     });
   }
 
@@ -172,9 +174,9 @@ class CourseRegistration {
       metadata: {
         ...this.metadata,
         rejectionReason: reason,
-        rejectedAt: new Date().toISOString()
+        rejectedAt: new Date().toISOString(),
       },
-      updatedAt: new Date()
+      updatedAt: new Date(),
     });
   }
 
@@ -190,9 +192,9 @@ class CourseRegistration {
       wooCommerceId: wooCommerceId,
       metadata: {
         ...this.metadata,
-        registeredAt: new Date().toISOString()
+        registeredAt: new Date().toISOString(),
       },
-      updatedAt: new Date()
+      updatedAt: new Date(),
     });
   }
 
@@ -208,9 +210,9 @@ class CourseRegistration {
       metadata: {
         ...this.metadata,
         lastError: errorMessage,
-        failedAt: new Date().toISOString()
+        failedAt: new Date().toISOString(),
       },
-      updatedAt: new Date()
+      updatedAt: new Date(),
     });
   }
 
@@ -245,25 +247,25 @@ class CourseRegistration {
   validateForRegistration() {
     const errors = [];
 
-    if (!this.name || this.name.trim() === '') {
-      errors.push('Nome do curso é obrigatório');
+    if (!this.name || this.name.trim() === "") {
+      errors.push("Nome do curso é obrigatório");
     }
 
     if (!this.category) {
-      errors.push('Categoria é obrigatória');
+      errors.push("Categoria é obrigatória");
     }
 
     if (!this.description || this.description.length < 10) {
-      errors.push('Descrição deve ter pelo menos 10 caracteres');
+      errors.push("Descrição deve ter pelo menos 10 caracteres");
     }
 
     if (!this.slug) {
-      errors.push('Slug é obrigatório');
+      errors.push("Slug é obrigatório");
     }
 
     return {
       isValid: errors.length === 0,
-      errors
+      errors,
     };
   }
 
@@ -275,17 +277,17 @@ class CourseRegistration {
     const product = {
       name: this.name,
       slug: this.slug,
-      type: 'simple',
+      type: "simple",
       status: this.status,
       description: this.description,
       short_description: this.shortDescription,
       regular_price: this.regularPrice,
       categories: [],
       meta_data: [
-        { key: '_source_url', value: this.sourceUrl },
-        { key: '_scraped_course_id', value: this.scrapedCourseId },
-        { key: '_registration_id', value: this.id }
-      ]
+        { key: "_source_url", value: this.sourceUrl },
+        { key: "_scraped_course_id", value: this.scrapedCourseId },
+        { key: "_registration_id", value: this.id },
+      ],
     };
 
     // Adicionar preço promocional se existir
@@ -336,7 +338,7 @@ class CourseRegistration {
       updatedAt: this.updatedAt,
       authorizedBy: this.authorizedBy,
       authorizedAt: this.authorizedAt,
-      wooCommerceId: this.wooCommerceId
+      wooCommerceId: this.wooCommerceId,
     };
   }
 

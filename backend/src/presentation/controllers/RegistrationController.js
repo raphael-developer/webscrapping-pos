@@ -6,16 +6,16 @@
  * - Validar entrada
  * - Chamar use cases
  * - Formatar resposta
- * 
+ *
  * Não contém lógica de negócio - apenas orquestra chamadas
  */
 
-const PrepareCoursesForRegistrationUseCase = require('../../application/use-cases/PrepareCoursesForRegistrationUseCase');
-const RegisterCourseUseCase = require('../../application/use-cases/RegisterCourseUseCase');
-const CourseRegistrationRepository = require('../../infrastructure/repositories/CourseRegistrationRepository');
-const WooCommerceRepository = require('../../infrastructure/woocommerce/WooCommerceRepository');
-const ScrapedCourseRepository = require('../../infrastructure/repositories/ScrapedCourseRepository');
-const config = require('../../config');
+const PrepareCoursesForRegistrationUseCase = require("../../application/use-cases/PrepareCoursesForRegistrationUseCase");
+const RegisterCourseUseCase = require("../../application/use-cases/RegisterCourseUseCase");
+const CourseRegistrationRepository = require("../../infrastructure/repositories/CourseRegistrationRepository");
+const WooCommerceRepository = require("../../infrastructure/woocommerce/WooCommerceRepository");
+const ScrapedCourseRepository = require("../../infrastructure/repositories/ScrapedCourseRepository");
+const config = require("../../config");
 
 /**
  * Controller para registro de cursos no WooCommerce
@@ -29,8 +29,8 @@ class RegistrationController {
       consumerSecret: config.woocommerce.consumerSecret,
       options: {
         timeout: config.woocommerce.timeout,
-        cacheEnabled: true
-      }
+        cacheEnabled: true,
+      },
     });
 
     this.scrapedCourseRepository = ScrapedCourseRepository.create();
@@ -38,7 +38,10 @@ class RegistrationController {
 
     // Inicializar repositório de registros
     this.registrationRepository.initialize().catch(err => {
-      console.error('[RegistrationController] Erro ao inicializar repositório:', err.message);
+      console.error(
+        "[RegistrationController] Erro ao inicializar repositório:",
+        err.message,
+      );
     });
   }
 
@@ -53,17 +56,17 @@ class RegistrationController {
       const useCase = new PrepareCoursesForRegistrationUseCase(
         this.scrapedCourseRepository,
         this.wooCommerceRepository,
-        this.registrationRepository
+        this.registrationRepository,
       );
 
       const result = await useCase.execute({
         category,
-        skipExisting: skipExisting !== 'false'
+        skipExisting: skipExisting !== "false",
       });
 
       res.json({
         success: true,
-        ...result
+        ...result,
       });
     } catch (error) {
       next(error);
@@ -81,7 +84,7 @@ class RegistrationController {
       const useCase = new PrepareCoursesForRegistrationUseCase(
         this.scrapedCourseRepository,
         this.wooCommerceRepository,
-        this.registrationRepository
+        this.registrationRepository,
       );
 
       const result = await useCase.prepareSingleCourse(scrapedCourseId);
@@ -102,14 +105,14 @@ class RegistrationController {
 
       const useCase = new RegisterCourseUseCase(
         this.registrationRepository,
-        this.wooCommerceRepository
+        this.wooCommerceRepository,
       );
 
       const result = await useCase.listPendingRegistrations({
         category,
         search,
         sortBy,
-        order
+        order,
       });
 
       res.json(result);
@@ -126,7 +129,7 @@ class RegistrationController {
     try {
       const useCase = new RegisterCourseUseCase(
         this.registrationRepository,
-        this.wooCommerceRepository
+        this.wooCommerceRepository,
       );
 
       const result = await useCase.listApprovedRegistrations();
@@ -147,7 +150,7 @@ class RegistrationController {
 
       const useCase = new RegisterCourseUseCase(
         this.registrationRepository,
-        this.wooCommerceRepository
+        this.wooCommerceRepository,
       );
 
       const result = await useCase.getRegistrationDetails(id);
@@ -171,13 +174,13 @@ class RegistrationController {
       if (!updates || Object.keys(updates).length === 0) {
         return res.status(400).json({
           success: false,
-          message: 'Nenhum dado para atualizar'
+          message: "Nenhum dado para atualizar",
         });
       }
 
       const useCase = new RegisterCourseUseCase(
         this.registrationRepository,
-        this.wooCommerceRepository
+        this.wooCommerceRepository,
       );
 
       const result = await useCase.updateRegistration(id, updates);
@@ -195,11 +198,11 @@ class RegistrationController {
   approve = async (req, res, next) => {
     try {
       const { id } = req.params;
-      const userId = req.body.userId || 'admin'; // Em produção, pegar do token JWT
+      const userId = req.body.userId || "admin"; // Em produção, pegar do token JWT
 
       const useCase = new RegisterCourseUseCase(
         this.registrationRepository,
-        this.wooCommerceRepository
+        this.wooCommerceRepository,
       );
 
       const result = await useCase.approveRegistration(id, userId);
@@ -222,13 +225,13 @@ class RegistrationController {
       if (!reason) {
         return res.status(400).json({
           success: false,
-          message: 'Motivo da rejeição é obrigatório'
+          message: "Motivo da rejeição é obrigatório",
         });
       }
 
       const useCase = new RegisterCourseUseCase(
         this.registrationRepository,
-        this.wooCommerceRepository
+        this.wooCommerceRepository,
       );
 
       const result = await useCase.rejectRegistration(id, reason);
@@ -246,11 +249,11 @@ class RegistrationController {
   registerInWooCommerce = async (req, res, next) => {
     try {
       const { id } = req.params;
-      const userId = req.body.userId || 'admin';
+      const userId = req.body.userId || "admin";
 
       const useCase = new RegisterCourseUseCase(
         this.registrationRepository,
-        this.wooCommerceRepository
+        this.wooCommerceRepository,
       );
 
       const result = await useCase.registerInWooCommerce(id, userId);
@@ -271,18 +274,22 @@ class RegistrationController {
    */
   registerBatch = async (req, res, next) => {
     try {
-      const { registrationIds, userId = 'admin' } = req.body;
+      const { registrationIds, userId = "admin" } = req.body;
 
-      if (!registrationIds || !Array.isArray(registrationIds) || registrationIds.length === 0) {
+      if (
+        !registrationIds ||
+        !Array.isArray(registrationIds) ||
+        registrationIds.length === 0
+      ) {
         return res.status(400).json({
           success: false,
-          message: 'Lista de IDs de registros é obrigatória'
+          message: "Lista de IDs de registros é obrigatória",
         });
       }
 
       const useCase = new RegisterCourseUseCase(
         this.registrationRepository,
-        this.wooCommerceRepository
+        this.wooCommerceRepository,
       );
 
       const result = await useCase.registerBatch(registrationIds, userId);
@@ -303,7 +310,7 @@ class RegistrationController {
 
       const useCase = new RegisterCourseUseCase(
         this.registrationRepository,
-        this.wooCommerceRepository
+        this.wooCommerceRepository,
       );
 
       const result = await useCase.deleteRegistration(id);
@@ -324,7 +331,7 @@ class RegistrationController {
 
       res.json({
         success: true,
-        data: statistics
+        data: statistics,
       });
     } catch (error) {
       next(error);
@@ -341,7 +348,7 @@ class RegistrationController {
 
       res.json({
         success: true,
-        data: backup
+        data: backup,
       });
     } catch (error) {
       next(error);
@@ -359,16 +366,19 @@ class RegistrationController {
       if (!backup || !backup.data) {
         return res.status(400).json({
           success: false,
-          message: 'Dados de backup inválidos'
+          message: "Dados de backup inválidos",
         });
       }
 
-      const result = await this.registrationRepository.importBackup(backup, overwrite);
+      const result = await this.registrationRepository.importBackup(
+        backup,
+        overwrite,
+      );
 
       res.json({
         success: true,
         data: result,
-        message: `Importados ${result.imported} registros, ${result.skipped} ignorados`
+        message: `Importados ${result.imported} registros, ${result.skipped} ignorados`,
       });
     } catch (error) {
       next(error);

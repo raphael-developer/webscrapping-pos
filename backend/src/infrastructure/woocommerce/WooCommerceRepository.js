@@ -242,10 +242,18 @@ class WooCommerceRepository {
    */
   async createProduct(productData) {
     try {
-      const response = await this.client.request('POST', 'products', {}, productData);
+      const response = await this.client.request(
+        "POST",
+        "products",
+        {},
+        productData,
+      );
       return WooCommerceCourse.fromWooCommerceAPI(response.data);
     } catch (error) {
-      console.error('[WooCommerceRepository] Erro ao criar produto:', error.message);
+      console.error(
+        "[WooCommerceRepository] Erro ao criar produto:",
+        error.message,
+      );
       throw error;
     }
   }
@@ -258,10 +266,18 @@ class WooCommerceRepository {
    */
   async updateProduct(id, productData) {
     try {
-      const response = await this.client.request('PUT', `products/${id}`, {}, productData);
+      const response = await this.client.request(
+        "PUT",
+        `products/${id}`,
+        {},
+        productData,
+      );
       return WooCommerceCourse.fromWooCommerceAPI(response.data);
     } catch (error) {
-      console.error('[WooCommerceRepository] Erro ao atualizar produto:', error.message);
+      console.error(
+        "[WooCommerceRepository] Erro ao atualizar produto:",
+        error.message,
+      );
       throw error;
     }
   }
@@ -274,10 +290,13 @@ class WooCommerceRepository {
    */
   async deleteProduct(id, force = false) {
     try {
-      await this.client.request('DELETE', `products/${id}`, { force });
+      await this.client.request("DELETE", `products/${id}`, { force });
       return true;
     } catch (error) {
-      console.error('[WooCommerceRepository] Erro ao deletar produto:', error.message);
+      console.error(
+        "[WooCommerceRepository] Erro ao deletar produto:",
+        error.message,
+      );
       throw error;
     }
   }

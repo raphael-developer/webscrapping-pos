@@ -6,22 +6,26 @@
  * APIs externas ou infraestrutura. Trabalha apenas com entidades de domínio.
  */
 
-const { CourseRegistration, RegistrationStatus } = require('../entities/CourseRegistration');
+const {
+  CourseRegistration,
+  RegistrationStatus,
+} = require("../entities/CourseRegistration");
 
 /**
  * Serviço de validação e preparação de cadastro de cursos
  */
 class CourseRegistrationService {
-  
   /**
    * Prepara cursos ausentes para cadastro
    * Converte lista de cursos scraped ausentes em registros de cadastro
-   * 
+   *
    * @param {Array<Object>} missingCourses - Cursos ausentes no WooCommerce
    * @returns {Array<CourseRegistration>}
    */
   static prepareMissingCoursesForRegistration(missingCourses) {
-    return missingCourses.map(course => CourseRegistration.fromScrapedCourse(course));
+    return missingCourses.map(course =>
+      CourseRegistration.fromScrapedCourse(course),
+    );
   }
 
   /**
@@ -35,13 +39,13 @@ class CourseRegistrationService {
 
     for (const registration of registrations) {
       const validation = registration.validateForRegistration();
-      
+
       if (validation.isValid) {
         valid.push(registration);
       } else {
         invalid.push({
           registration,
-          errors: validation.errors
+          errors: validation.errors,
         });
       }
     }
@@ -53,10 +57,11 @@ class CourseRegistrationService {
         total: registrations.length,
         validCount: valid.length,
         invalidCount: invalid.length,
-        validPercentage: registrations.length > 0 
-          ? ((valid.length / registrations.length) * 100).toFixed(1)
-          : 0
-      }
+        validPercentage:
+          registrations.length > 0
+            ? ((valid.length / registrations.length) * 100).toFixed(1)
+            : 0,
+      },
     };
   }
 
@@ -68,25 +73,25 @@ class CourseRegistrationService {
   static canRegister(registration) {
     // Verificar status do registro
     if (registration.isRegistered()) {
-      return { 
-        canRegister: false, 
-        reason: 'Curso já foi cadastrado no WooCommerce' 
+      return {
+        canRegister: false,
+        reason: "Curso já foi cadastrado no WooCommerce",
       };
     }
 
     if (!registration.isApproved()) {
-      return { 
-        canRegister: false, 
-        reason: 'Cadastro não foi autorizado pelo usuário' 
+      return {
+        canRegister: false,
+        reason: "Cadastro não foi autorizado pelo usuário",
       };
     }
 
     // Validar dados obrigatórios
     const validation = registration.validateForRegistration();
     if (!validation.isValid) {
-      return { 
-        canRegister: false, 
-        reason: `Dados inválidos: ${validation.errors.join(', ')}` 
+      return {
+        canRegister: false,
+        reason: `Dados inválidos: ${validation.errors.join(", ")}`,
       };
     }
 
@@ -99,11 +104,11 @@ class CourseRegistrationService {
    * @returns {string}
    */
   static normalizeCategory(categoryName) {
-    if (!categoryName) return '';
+    if (!categoryName) return "";
     return categoryName
       .toLowerCase()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
       .trim();
   }
 
@@ -114,7 +119,7 @@ class CourseRegistrationService {
    */
   static groupByCategory(registrations) {
     return registrations.reduce((groups, registration) => {
-      const category = registration.category || 'Sem Categoria';
+      const category = registration.category || "Sem Categoria";
       if (!groups[category]) {
         groups[category] = [];
       }
@@ -151,17 +156,20 @@ class CourseRegistrationService {
     return {
       total: registrations.length,
       byStatus: {
-        pendingReview: (byStatus[RegistrationStatus.PENDING_REVIEW] || []).length,
+        pendingReview: (byStatus[RegistrationStatus.PENDING_REVIEW] || [])
+          .length,
         approved: (byStatus[RegistrationStatus.APPROVED] || []).length,
         rejected: (byStatus[RegistrationStatus.REJECTED] || []).length,
         registered: (byStatus[RegistrationStatus.REGISTERED] || []).length,
-        failed: (byStatus[RegistrationStatus.FAILED] || []).length
+        failed: (byStatus[RegistrationStatus.FAILED] || []).length,
       },
-      byCategory: Object.entries(byCategory).map(([name, courses]) => ({
-        name,
-        count: courses.length
-      })).sort((a, b) => b.count - a.count),
-      categories: Object.keys(byCategory).length
+      byCategory: Object.entries(byCategory)
+        .map(([name, courses]) => ({
+          name,
+          count: courses.length,
+        }))
+        .sort((a, b) => b.count - a.count),
+      categories: Object.keys(byCategory).length,
     };
   }
 
@@ -208,13 +216,13 @@ class CourseRegistrationService {
    * @param {string} order - 'asc' ou 'desc'
    * @returns {Array<CourseRegistration>}
    */
-  static sort(registrations, sortBy = 'name', order = 'asc') {
+  static sort(registrations, sortBy = "name", order = "asc") {
     return [...registrations].sort((a, b) => {
       let valueA = a[sortBy];
       let valueB = b[sortBy];
 
       // Tratamento especial para strings
-      if (typeof valueA === 'string') {
+      if (typeof valueA === "string") {
         valueA = valueA.toLowerCase();
         valueB = valueB.toLowerCase();
       }
@@ -225,7 +233,7 @@ class CourseRegistrationService {
         valueB = valueB.getTime();
       }
 
-      if (order === 'asc') {
+      if (order === "asc") {
         return valueA < valueB ? -1 : valueA > valueB ? 1 : 0;
       } else {
         return valueA > valueB ? -1 : valueA < valueB ? 1 : 0;
@@ -242,22 +250,24 @@ class CourseRegistrationService {
   static checkForDuplicates(registration, existingCourses) {
     const normalizedName = registration.name
       .toLowerCase()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .replace(/[^a-z0-9\s]/g, '')
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9\s]/g, "")
       .trim();
 
     const matches = existingCourses.filter(course => {
-      const existingName = (course.name || course.title || '')
+      const existingName = (course.name || course.title || "")
         .toLowerCase()
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .replace(/[^a-z0-9\s]/g, '')
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9\s]/g, "")
         .trim();
 
       // Verificar correspondência exata ou parcial (similaridade > 80%)
-      return existingName === normalizedName || 
-             this.calculateSimilarity(normalizedName, existingName) > 0.8;
+      return (
+        existingName === normalizedName ||
+        this.calculateSimilarity(normalizedName, existingName) > 0.8
+      );
     });
 
     return {
@@ -265,12 +275,14 @@ class CourseRegistrationService {
       matches: matches.map(m => ({
         id: m.id,
         name: m.name || m.title,
-        similarity: this.calculateSimilarity(normalizedName, 
-          (m.name || m.title || '').toLowerCase()
-            .normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '')
-        )
-      }))
+        similarity: this.calculateSimilarity(
+          normalizedName,
+          (m.name || m.title || "")
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, ""),
+        ),
+      })),
     };
   }
 
@@ -284,11 +296,11 @@ class CourseRegistrationService {
     const len1 = str1.length;
     const len2 = str2.length;
     const maxLen = Math.max(len1, len2);
-    
+
     if (maxLen === 0) return 1;
 
     const distance = this.levenshteinDistance(str1, str2);
-    return 1 - (distance / maxLen);
+    return 1 - distance / maxLen;
   }
 
   /**
@@ -300,7 +312,9 @@ class CourseRegistrationService {
   static levenshteinDistance(str1, str2) {
     const m = str1.length;
     const n = str2.length;
-    const dp = Array(m + 1).fill(null).map(() => Array(n + 1).fill(0));
+    const dp = Array(m + 1)
+      .fill(null)
+      .map(() => Array(n + 1).fill(0));
 
     for (let i = 0; i <= m; i++) dp[i][0] = i;
     for (let j = 0; j <= n; j++) dp[0][j] = j;
@@ -313,7 +327,7 @@ class CourseRegistrationService {
           dp[i][j] = Math.min(
             dp[i - 1][j] + 1,
             dp[i][j - 1] + 1,
-            dp[i - 1][j - 1] + 1
+            dp[i - 1][j - 1] + 1,
           );
         }
       }
