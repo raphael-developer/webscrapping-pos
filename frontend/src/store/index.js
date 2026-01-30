@@ -31,6 +31,7 @@ import { createStore } from "vuex";
 import courses from "./modules/courses";
 import categories from "./modules/categories";
 import scraper from "./modules/scraper";
+import registration from "./modules/registration";
 
 export default createStore({
   state,
@@ -40,5 +41,6 @@ export default createStore({
     courses,
     categories,
     scraper,
+    registration,
   },
 });

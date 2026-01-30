@@ -59,6 +59,14 @@ const routes = [
     },
   },
   {
+    path: "/registration",
+    name: "CourseRegistration",
+    component: () => import("@/views/CourseRegistration.vue"),
+    meta: {
+      title: "Cadastro de Cursos",
+    },
+  },
+  {
     path: "/:pathMatch(.*)*",
     name: "NotFound",
     component: () => import("@/views/NotFound.vue"),

@@ -234,6 +234,53 @@ class WooCommerceRepository {
     this.categoriesCache = null;
     this.client.clearCache();
   }
+
+  /**
+   * Cria um novo produto (curso) no WooCommerce
+   * @param {Object} productData - Dados do produto
+   * @returns {Promise<WooCommerceCourse>}
+   */
+  async createProduct(productData) {
+    try {
+      const response = await this.client.request('POST', 'products', {}, productData);
+      return WooCommerceCourse.fromWooCommerceAPI(response.data);
+    } catch (error) {
+      console.error('[WooCommerceRepository] Erro ao criar produto:', error.message);
+      throw error;
+    }
+  }
+
+  /**
+   * Atualiza um produto existente no WooCommerce
+   * @param {number} id - ID do produto
+   * @param {Object} productData - Dados atualizados
+   * @returns {Promise<WooCommerceCourse>}
+   */
+  async updateProduct(id, productData) {
+    try {
+      const response = await this.client.request('PUT', `products/${id}`, {}, productData);
+      return WooCommerceCourse.fromWooCommerceAPI(response.data);
+    } catch (error) {
+      console.error('[WooCommerceRepository] Erro ao atualizar produto:', error.message);
+      throw error;
+    }
+  }
+
+  /**
+   * Remove um produto do WooCommerce
+   * @param {number} id - ID do produto
+   * @param {boolean} force - Se deve deletar permanentemente
+   * @returns {Promise<boolean>}
+   */
+  async deleteProduct(id, force = false) {
+    try {
+      await this.client.request('DELETE', `products/${id}`, { force });
+      return true;
+    } catch (error) {
+      console.error('[WooCommerceRepository] Erro ao deletar produto:', error.message);
+      throw error;
+    }
+  }
 }
 
 module.exports = WooCommerceRepository;

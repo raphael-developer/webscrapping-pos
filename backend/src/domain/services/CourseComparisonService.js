@@ -27,6 +27,7 @@ class CourseComparisonService {
     // Criar mapas normalizados para comparação eficiente
     const scrapedMap = new Map();
     const wooCommerceMap = new Map();
+    const wooCommerceList = []; // Lista para busca fuzzy
 
     // Indexar cursos scraped por nome normalizado
     for (const course of scrapedCourses) {
@@ -43,18 +44,36 @@ class CourseComparisonService {
       const key = CourseComparisonService.normalizeForComparison(course.name);
       if (key) {
         wooCommerceMap.set(key, course);
+        wooCommerceList.push({ key, course });
       }
     }
 
     // Encontrar cursos apenas no site (não estão na API)
     const onlyInSite = [];
     const inBoth = [];
+    const matchedWooCommerceKeys = new Set();
 
     for (const [key, scrapedCourse] of scrapedMap) {
-      const wooCommerceCourse = wooCommerceMap.get(key);
+      // Primeiro: busca exata por chave normalizada
+      let wooCommerceCourse = wooCommerceMap.get(key);
+      let matchKey = key;
+
+      // Se não encontrou exato, tentar busca fuzzy (nomes equivalentes)
+      if (!wooCommerceCourse) {
+        const fuzzyMatch = wooCommerceList.find(
+          item =>
+            !matchedWooCommerceKeys.has(item.key) &&
+            CourseComparisonService.areNamesEquivalent(key, item.key),
+        );
+        if (fuzzyMatch) {
+          wooCommerceCourse = fuzzyMatch.course;
+          matchKey = fuzzyMatch.key;
+        }
+      }
 
       if (wooCommerceCourse) {
         // Curso existe em ambos - verificar diferenças
+        matchedWooCommerceKeys.add(matchKey);
         inBoth.push({
           scraped: scrapedCourse,
           wooCommerce: wooCommerceCourse,
@@ -76,7 +95,7 @@ class CourseComparisonService {
     // Encontrar cursos apenas na API (não estão no site)
     const onlyInAPI = [];
     for (const [key, wooCommerceCourse] of wooCommerceMap) {
-      if (!scrapedMap.has(key)) {
+      if (!matchedWooCommerceKeys.has(key)) {
         onlyInAPI.push({
           ...wooCommerceCourse,
           normalizedName: key,
@@ -109,7 +128,7 @@ class CourseComparisonService {
 
   /**
    * Normaliza string para comparação
-   * Remove acentos, caracteres especiais e padroniza espaços
+   * Remove acentos, caracteres especiais, carga horária e padroniza espaços
    *
    * @param {string} str
    * @returns {string}
@@ -121,9 +140,42 @@ class CourseComparisonService {
       .toUpperCase()
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "") // Remove acentos
-      .replace(/[^A-Z0-9\s]/g, "") // Remove caracteres especiais
+      .replace(/\d+\s*H(ORAS?)?\b/gi, "") // Remove padrões de carga horária (ex: 1500h, 720 horas)
+      .replace(/\(\s*\d+\s*H(ORAS?)?\s*\)/gi, "") // Remove carga horária entre parênteses
+      .replace(/[^A-Z\s]/g, "") // Remove caracteres especiais e números restantes
       .replace(/\s+/g, " ") // Normaliza espaços
       .trim();
+  }
+
+  /**
+   * Verifica se dois nomes de curso são equivalentes
+   * Usa normalização + verificação de substring para casos onde
+   * um nome é prefixo do outro
+   *
+   * @param {string} name1
+   * @param {string} name2
+   * @returns {boolean}
+   */
+  static areNamesEquivalent(name1, name2) {
+    const norm1 = CourseComparisonService.normalizeForComparison(name1);
+    const norm2 = CourseComparisonService.normalizeForComparison(name2);
+
+    // Match exato
+    if (norm1 === norm2) return true;
+
+    // Se um é vazio, não são equivalentes
+    if (!norm1 || !norm2) return false;
+
+    // Verifica se um nome é prefixo significativo do outro (mínimo 80%)
+    const shorter = norm1.length < norm2.length ? norm1 : norm2;
+    const longer = norm1.length < norm2.length ? norm2 : norm1;
+
+    // O nome mais curto deve ser pelo menos 80% do tamanho do maior
+    if (shorter.length / longer.length >= 0.8 && longer.startsWith(shorter)) {
+      return true;
+    }
+
+    return false;
   }
 
   /**

@@ -1,0 +1,44 @@
+[
+  {
+    "id": "reg_1769719194034_r0ixqrmxr",
+    "scrapedCourseId": 852,
+    "name": "PSICOLOGIA APLICADA NO ÂMBITO SOCIAL",
+    "slug": "psicologia-aplicada-no-ambito-social",
+    "category": "Psicologia",
+    "description": "",
+    "shortDescription": "720 horas",
+    "duration": "720 horas",
+    "price": "0",
+    "regularPrice": "0",
+    "salePrice": "",
+    "imageUrl": "",
+    "galleryImages": [],
+    "status": "draft",
+    "registrationStatus": "pending_review",
+    "metadata": {
+      "originalData": {
+        "id": 852,
+        "title": "PSICOLOGIA APLICADA NO ÂMBITO SOCIAL",
+        "category": "Psicologia",
+        "description": "",
+        "duration": "720 horas",
+        "modality": "EAD",
+        "price": "",
+        "url": "https://faculdadeunica.com.br/pos-graduacao/psicologia/psicologia-aplicada-no-ambito-social-720",
+        "imageUrl": "",
+        "createdAt": "2026-01-29T18:59:45.617Z",
+        "updatedAt": "2026-01-29T18:59:53.956Z",
+        "normalizedName": "PSICOLOGIA APLICADA NO AMBITO SOCIAL",
+        "reason": "Não encontrado na API WooCommerce"
+      },
+      "scrapedAt": "2026-01-29T20:39:54.034Z"
+    },
+    "customFields": {},
+    "sourceUrl": "https://faculdadeunica.com.br/pos-graduacao/psicologia/psicologia-aplicada-no-ambito-social-720",
+    "createdAt": "2026-01-29T20:39:54.035Z",
+    "updatedAt": "2026-01-29T20:39:54.035Z",
+    "authorizedBy": null,
+    "authorizedAt": null,
+    "wooCommerceId": null
+  }
+]

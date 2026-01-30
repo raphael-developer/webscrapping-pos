@@ -53,4 +53,43 @@ export default {
     api.get("/comparison/woocommerce/stats", { timeout: 60000 }),
   getScrapedStats: () => api.get("/comparison/scraped/stats"),
   refreshComparisonCache: () => api.post("/comparison/refresh"),
+
+  // ===== Registro de Cursos (Cadastro Assistido) =====
+  // Preparação
+  prepareCoursesForRegistration: (params = {}) =>
+    api.get("/registration/prepare", { params, timeout: 120000 }),
+  prepareSingleCourse: (scrapedCourseId) =>
+    api.post(`/registration/prepare/${scrapedCourseId}`, {}, { timeout: 60000 }),
+
+  // Listagem
+  getPendingRegistrations: (params = {}) =>
+    api.get("/registration", { params, timeout: 60000 }),
+  getApprovedRegistrations: () =>
+    api.get("/registration/approved", { timeout: 60000 }),
+  getRegistrationStatistics: () =>
+    api.get("/registration/statistics", { timeout: 30000 }),
+  getRegistrationDetails: (id) =>
+    api.get(`/registration/${id}`, { timeout: 30000 }),
+
+  // Ações
+  updateRegistration: (id, data) =>
+    api.put(`/registration/${id}`, data, { timeout: 30000 }),
+  approveRegistration: (id, userId = 'admin') =>
+    api.post(`/registration/${id}/approve`, { userId }, { timeout: 30000 }),
+  rejectRegistration: (id, reason) =>
+    api.post(`/registration/${id}/reject`, { reason }, { timeout: 30000 }),
+  registerInWooCommerce: (id, userId = 'admin') =>
+    api.post(`/registration/${id}/register`, { userId }, { timeout: 60000 }),
+  deleteRegistration: (id) =>
+    api.delete(`/registration/${id}`, { timeout: 30000 }),
+
+  // Batch
+  registerBatch: (registrationIds, userId = 'admin') =>
+    api.post("/registration/register-batch", { registrationIds, userId }, { timeout: 180000 }),
+
+  // Backup
+  exportRegistrations: () =>
+    api.get("/registration/export", { timeout: 60000 }),
+  importRegistrations: (backup, overwrite = false) =>
+    api.post("/registration/import", { backup, overwrite }, { timeout: 60000 }),
 };

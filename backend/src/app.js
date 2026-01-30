@@ -11,6 +11,7 @@ const config = require("./config");
 // Clean Architecture - Presentation Layer Routes
 const courseRoutes = require("./presentation/routes/courseRoutes");
 const comparisonRoutes = require("./presentation/routes/comparisonRoutes");
+const registrationRoutes = require("./presentation/routes/registrationRoutes");
 
 // Legacy routes (mantidos para compatibilidade durante migração)
 const createScraperRoutes = require("./routes/scraperRoutes");
@@ -95,6 +96,9 @@ class App {
 
     // Comparação WooCommerce
     this.app.use("/api/comparison", comparisonRoutes);
+
+    // Registro de Cursos no WooCommerce (cadastro assistido)
+    this.app.use("/api/registration", registrationRoutes);
 
     // ===== Legacy Routes (compatibilidade) =====
     // Scraper (ainda usa arquitetura antiga)
