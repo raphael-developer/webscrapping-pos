@@ -55,8 +55,31 @@
               rows="5"
               :rules="[rules.required, rules.minLength(10)]"
               counter
-              class="mb-4"
+              class="mb-2"
             />
+            
+            <!-- Botão para buscar descrição do site -->
+            <div class="d-flex align-center mb-4">
+              <v-btn
+                color="secondary"
+                variant="outlined"
+                size="small"
+                :loading="fetchingDescription"
+                :disabled="!props.registration?.sourceUrl"
+                @click="fetchSiteDescription"
+              >
+                <v-icon start>mdi-web</v-icon>
+                Buscar Descrição do Site
+              </v-btn>
+              <v-chip
+                v-if="descriptionSource"
+                size="small"
+                :color="descriptionSource === 'site_original' ? 'success' : 'warning'"
+                class="ml-2"
+              >
+                {{ descriptionSource === 'site_original' ? 'Original do site' : 'Gerada automaticamente' }}
+              </v-chip>
+            </div>
             
             <!-- Descrição curta -->
             <v-textarea
@@ -296,6 +319,10 @@ const emit = defineEmits(['save', 'approve', 'cancel'])
 const formRef = ref(null)
 const isFormValid = ref(false)
 
+// Fetch description state
+const fetchingDescription = ref(false)
+const descriptionSource = ref(null)
+
 // Form data
 const form = reactive({
   name: '',
@@ -398,6 +425,43 @@ const customFieldsToObject = () => {
     }
   })
   return obj
+}
+
+// Buscar descrição original do site
+const fetchSiteDescription = async () => {
+  if (!props.registration?.id) {
+    console.error('Registration ID não disponível')
+    return
+  }
+  
+  fetchingDescription.value = true
+  
+  try {
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000'
+    const response = await fetch(`${API_URL}/api/registration/${props.registration.id}/fetch-description`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ updateRecord: true })  // Atualiza o registro no backend
+    })
+    
+    const result = await response.json()
+    
+    if (result.success && result.data?.description) {
+      form.description = result.data.description
+      descriptionSource.value = 'site_original'
+      console.log('Descrição obtida do site original:', form.description.substring(0, 100) + '...')
+    } else {
+      console.error('Erro ao buscar descrição:', result.error || 'Descrição não encontrada')
+      alert('Não foi possível obter a descrição do site. ' + (result.error || 'Tente novamente.'))
+    }
+  } catch (error) {
+    console.error('Erro ao buscar descrição do site:', error)
+    alert('Erro ao conectar com o servidor. Verifique se o backend está rodando.')
+  } finally {
+    fetchingDescription.value = false
+  }
 }
 
 // Ações

@@ -66,6 +66,9 @@ router.post("/:id/approve", controller.approve);
 // Rejeita um registro
 router.post("/:id/reject", controller.reject);
 
+// Busca descrição real do site para um registro
+router.post("/:id/fetch-description", controller.fetchSiteDescription);
+
 // Cadastra um curso aprovado no WooCommerce
 router.post("/:id/register", controller.registerInWooCommerce);
 

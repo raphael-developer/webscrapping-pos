@@ -573,7 +573,19 @@ class ScraperService {
 
       this.emitLog(
         "info",
-        `🎉 Scraping concluído! Total de cursos: ${this.courses.length}`,
+        `🎉 Scraping de cursos concluído! Total de cursos: ${this.courses.length}`,
+      );
+
+      // NOVO: Buscar descrições reais de cada curso
+      this.emitLog(
+        "info",
+        "📝 Buscando descrições reais dos cursos do site...",
+      );
+      await this.fetchAllDescriptions();
+
+      this.emitLog(
+        "info",
+        `✅ Scraping completo! ${this.courses.length} cursos com descrições`,
       );
       return {
         courses: this.courses,
@@ -590,8 +602,10 @@ class ScraperService {
   // Método para scraping de uma única categoria (usado para retries)
   async scrapeSingleCategory(categoryName) {
     try {
-      Logger.info(`scrapeSingleCategory: Iniciando scraping de "${categoryName}"`);
-      
+      Logger.info(
+        `scrapeSingleCategory: Iniciando scraping de "${categoryName}"`,
+      );
+
       // Encontrar ou criar categoria
       let category = this.categories.find(c => c.name === categoryName);
       if (!category) {
@@ -613,7 +627,8 @@ class ScraperService {
 
       // Configurar para máxima robustez
       const categoryUrl = this.normalizeUnicaUrl(category.url);
-      const coursesTaskTimeout = parseInt(process.env.SCRAPER_COURSES_TASK_TIMEOUT) || 240000;
+      const coursesTaskTimeout =
+        parseInt(process.env.SCRAPER_COURSES_TASK_TIMEOUT) || 240000;
 
       const coursesData = await this.cluster.execute({
         type: "courses",
@@ -624,7 +639,9 @@ class ScraperService {
       });
 
       if (!coursesData || coursesData.length === 0) {
-        Logger.warn(`scrapeSingleCategory: Nenhum curso encontrado para "${categoryName}"`);
+        Logger.warn(
+          `scrapeSingleCategory: Nenhum curso encontrado para "${categoryName}"`,
+        );
         return [];
       }
 
@@ -643,10 +660,15 @@ class ScraperService {
         });
       });
 
-      Logger.info(`scrapeSingleCategory: ${courses.length} cursos extraídos de "${categoryName}"`);
+      Logger.info(
+        `scrapeSingleCategory: ${courses.length} cursos extraídos de "${categoryName}"`,
+      );
       return courses;
     } catch (error) {
-      Logger.error(`Erro em scrapeSingleCategory para "${categoryName}":`, error);
+      Logger.error(
+        `Erro em scrapeSingleCategory para "${categoryName}":`,
+        error,
+      );
       return [];
     }
   }
@@ -795,8 +817,8 @@ class ScraperService {
 
       if (!coursesData || coursesData.length === 0) {
         this.emitLog(
-          "warn",
-          `⚠️ Nenhum curso retornado para categoria ${category.name} após tentativas`,
+          "info",
+          `ℹ️ Categoria ${category.name} retornou 0 cursos nesta tentativa (será verificado pelo controller)`,
         );
         return;
       }
@@ -1949,6 +1971,196 @@ class ScraperService {
       this.initialized = false;
     }
   }
-}
 
+  /**
+   * Busca descrições reais de todos os cursos acessando cada página individual
+   * Usa fetch HTTP simples para ser mais rápido que Puppeteer
+   */
+  async fetchAllDescriptions() {
+    const BATCH_SIZE = parseInt(process.env.SCRAPER_DESC_BATCH_SIZE) || 15;
+    const DELAY_BETWEEN_BATCHES =
+      parseInt(process.env.SCRAPER_DESC_BATCH_DELAY) || 1500;
+    const DELAY_BETWEEN_REQUESTS =
+      parseInt(process.env.SCRAPER_DESC_REQUEST_DELAY) || 300;
+    const RETRIES = parseInt(process.env.SCRAPER_DESC_RETRIES) || 2;
+
+    const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+    const fetchDescription = async (url, attempt = 1) => {
+      try {
+        const response = await fetch(url, {
+          headers: {
+            "User-Agent":
+              "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+            "Accept-Language": "pt-BR,pt;q=0.9",
+          },
+        });
+
+        if (!response.ok) {
+          return { success: false, error: `HTTP ${response.status}` };
+        }
+
+        const html = await response.text();
+
+        // Padrão 1: objective (descrição curta/objetivo) - MELHOR OPÇÃO
+        let match = html.match(/objective\\\":\\\"([^\\]+)/);
+        if (match && match[1] && match[1].length >= 30) {
+          const desc = match[1]
+            .replace(/\\n/g, " ")
+            .replace(/\s+/g, " ")
+            .trim();
+          return { success: true, description: desc };
+        }
+
+        // Padrão 2: description longa do curso
+        match = html.match(
+          /\\\"description\\\":\\\"\\s*((?:A Pós-Graduação|O curso|Este curso|O programa|A especialização|No curso)[^\\]+)/,
+        );
+        if (match && match[1] && match[1].length >= 50) {
+          const desc = match[1]
+            .replace(/\\n/g, " ")
+            .replace(/\s+/g, " ")
+            .trim();
+          return { success: true, description: desc };
+        }
+
+        // Padrão 3: qualquer description longa
+        match = html.match(/\\\"description\\\":\\\"\\s*([^\\]{50,})/);
+        if (match && match[1]) {
+          const desc = match[1]
+            .replace(/\\n/g, " ")
+            .replace(/\s+/g, " ")
+            .trim();
+          if (
+            desc.length >= 50 &&
+            !desc.includes("Pós-Graduação EAD é no Centro")
+          ) {
+            return { success: true, description: desc };
+          }
+        }
+
+        // Retry se não encontrou
+        if (attempt < RETRIES) {
+          await sleep(1000);
+          return fetchDescription(url, attempt + 1);
+        }
+
+        return { success: false, error: "Descrição não encontrada" };
+      } catch (error) {
+        if (attempt < RETRIES) {
+          await sleep(1000);
+          return fetchDescription(url, attempt + 1);
+        }
+        return { success: false, error: error.message };
+      }
+    };
+
+    let success = 0;
+    let failed = 0;
+    const totalBatches = Math.ceil(this.courses.length / BATCH_SIZE);
+
+    for (let i = 0; i < this.courses.length; i += BATCH_SIZE) {
+      const batch = this.courses.slice(i, i + BATCH_SIZE);
+      const batchNum = Math.floor(i / BATCH_SIZE) + 1;
+
+      this.emitLog(
+        "info",
+        `📝 Buscando descrições: batch ${batchNum}/${totalBatches}`,
+      );
+
+      for (const course of batch) {
+        if (!course.url) {
+          failed++;
+          continue;
+        }
+
+        // Tentar corrigir URLs com categoria incorreta
+        let urlToFetch = course.url;
+
+        // Verificar se é URL com categoria diferente do esperado
+        const urlObj = new URL(urlToFetch);
+        const pathParts = urlObj.pathname.split("/").filter(Boolean);
+
+        // URLs podem ter categoria errada - tentar buscar mesmo assim
+        const result = await fetchDescription(urlToFetch);
+
+        if (result.success) {
+          course.description = result.description;
+          course.descriptionSource = "site_original";
+          course.descriptionFetchedAt = new Date().toISOString();
+          course.descriptionGenerated = false;
+          success++;
+        } else {
+          // Se falhou, tentar com outras categorias conhecidas
+          const categorySlugMap = {
+            "ciencias-da-saude": "ciencias-da-saude",
+            educacao: "educacao",
+            "empresarial-ti-e-negocios": "empresarial-ti-e-negocios",
+            engenharias: "engenharias",
+            estetica: "estetica",
+            gastronomia: "gastronomia",
+            juridica: "juridica",
+            "mba-executivo": "mba-executivo",
+            "meio-ambiente": "meio-ambiente",
+            psicologia: "psicologia",
+            "servico-social": "servico-social",
+            undefined: "undefined", // Algumas URLs usam undefined
+          };
+
+          let foundInAltCategory = false;
+          const slug = pathParts[pathParts.length - 1]; // último segmento é o slug do curso
+
+          for (const altCategory of Object.values(categorySlugMap)) {
+            if (foundInAltCategory) break;
+
+            const altUrl = `https://faculdadeunica.com.br/pos-graduacao/${altCategory}/${slug}`;
+            if (altUrl === urlToFetch) continue;
+
+            const altResult = await fetchDescription(altUrl);
+            if (altResult.success) {
+              course.url = altUrl; // Atualizar URL correta
+              course.description = altResult.description;
+              course.descriptionSource = "site_original";
+              course.descriptionFetchedAt = new Date().toISOString();
+              course.descriptionGenerated = false;
+              foundInAltCategory = true;
+              success++;
+              Logger.info(
+                `Descrição encontrada em categoria alternativa: ${course.title} -> ${altCategory}`,
+              );
+            }
+
+            await sleep(DELAY_BETWEEN_REQUESTS);
+          }
+
+          if (!foundInAltCategory) {
+            course.descriptionSource = "not_found";
+            course.descriptionError = result.error;
+            failed++;
+            Logger.warn(`Descrição não encontrada: ${course.title}`);
+          }
+        }
+
+        await sleep(DELAY_BETWEEN_REQUESTS);
+      }
+
+      if (i + BATCH_SIZE < this.courses.length) {
+        await sleep(DELAY_BETWEEN_BATCHES);
+      }
+    }
+
+    const total = success + failed;
+    const rate = total > 0 ? ((success / total) * 100).toFixed(1) : 0;
+
+    this.emitLog(
+      "info",
+      `📊 Descrições: ${success} ✅ | ${failed} ❌ | Taxa: ${rate}%`,
+    );
+    Logger.info(
+      `fetchAllDescriptions: ${success}/${total} descrições obtidas (${rate}%)`,
+    );
+
+    return { success, failed, rate };
+  }
+}
 module.exports = ScraperService;

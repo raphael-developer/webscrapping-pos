@@ -275,6 +275,20 @@
                   <v-tooltip activator="parent">Cadastrar no WooCommerce</v-tooltip>
                 </v-btn>
                 
+                <!-- Botão de retentar (apenas para falhas) -->
+                <v-btn
+                  v-if="registration.registrationStatus === 'failed'"
+                  icon
+                  size="small"
+                  variant="text"
+                  color="warning"
+                  :loading="registering && currentActionId === registration.id"
+                  @click="retryRegistration(registration)"
+                >
+                  <v-icon>mdi-refresh</v-icon>
+                  <v-tooltip activator="parent">Retentar Cadastro</v-tooltip>
+                </v-btn>
+                
                 <!-- Botão de rejeitar -->
                 <v-btn
                   v-if="registration.registrationStatus !== 'registered'"
@@ -607,6 +621,30 @@ const registerInWooCommerce = async (registration) => {
     }
   } catch (err) {
     showSnackbar('Erro ao cadastrar no WooCommerce', 'error')
+  } finally {
+    currentActionId.value = null
+  }
+}
+
+// Retentar cadastro de curso com erro
+const retryRegistration = async (registration) => {
+  currentActionId.value = registration.id
+  try {
+    // Primeiro reaprova o curso
+    await store.dispatch('registration/approveRegistration', {
+      id: registration.id
+    })
+    // Depois tenta cadastrar novamente
+    const result = await store.dispatch('registration/registerInWooCommerce', {
+      id: registration.id
+    })
+    if (result.success) {
+      showSnackbar(`Curso "${registration.name}" cadastrado com sucesso!`)
+    } else {
+      showSnackbar(result.message || 'Erro ao cadastrar', 'error')
+    }
+  } catch (err) {
+    showSnackbar('Erro ao retentar cadastro', 'error')
   } finally {
     currentActionId.value = null
   }

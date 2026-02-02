@@ -12,6 +12,7 @@
 
 const https = require("https");
 const crypto = require("crypto");
+const zlib = require("zlib");
 
 /**
  * Cliente WooCommerce REST API
@@ -205,29 +206,66 @@ class WooCommerceClient {
     return new Promise((resolve, reject) => {
       const parsedUrl = new URL(url);
 
+      // Preparar body se houver dados
+      const bodyData = data ? JSON.stringify(data) : null;
+
       const options = {
         hostname: parsedUrl.hostname,
         port: parsedUrl.port || 443,
         path: parsedUrl.pathname + parsedUrl.search,
         method: method,
         headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          "User-Agent": "WooCommerce-Client/1.0",
+          // Headers que simulam um navegador real para evitar bloqueio do ModSecurity
+          Accept: "application/json, text/plain, */*",
+          "Accept-Language": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7",
+          "Cache-Control": "no-cache",
+          Connection: "keep-alive",
+          Origin: parsedUrl.origin,
+          Referer: `${parsedUrl.origin}/`,
+          "Sec-Fetch-Dest": "empty",
+          "Sec-Fetch-Mode": "cors",
+          "Sec-Fetch-Site": "same-origin",
+          "User-Agent":
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
+          "X-Requested-With": "XMLHttpRequest",
         },
         timeout: this.options.timeout,
       };
 
+      // Adicionar headers de conteúdo apenas quando há dados
+      if (bodyData) {
+        options.headers["Content-Type"] = "application/json";
+        options.headers["Content-Length"] = Buffer.byteLength(bodyData, "utf8");
+      }
+
       const req = https.request(options, res => {
-        let body = "";
+        const chunks = [];
 
         res.on("data", chunk => {
-          body += chunk;
+          chunks.push(chunk);
         });
 
         res.on("end", () => {
+          let body = Buffer.concat(chunks);
+
+          // Descompactar se necessário
+          const encoding = res.headers["content-encoding"];
           try {
-            const parsed = JSON.parse(body);
+            if (encoding === "gzip") {
+              body = zlib.gunzipSync(body);
+            } else if (encoding === "deflate") {
+              body = zlib.inflateSync(body);
+            } else if (encoding === "br") {
+              body = zlib.brotliDecompressSync(body);
+            }
+          } catch (decompressError) {
+            // Ignorar erro de descompressão, pode não estar compactado
+          }
+
+          const bodyStr = body.toString("utf-8");
+
+          try {
+            const parsed = JSON.parse(bodyStr);
 
             if (res.statusCode >= 200 && res.statusCode < 300) {
               resolve({
@@ -245,9 +283,24 @@ class WooCommerceClient {
               );
             }
           } catch (parseError) {
-            reject(
-              new Error(`Erro ao parsear resposta: ${body.substring(0, 200)}`),
-            );
+            // Se não é JSON, verificar se é erro HTML do ModSecurity
+            if (
+              bodyStr.includes("Not Acceptable") ||
+              bodyStr.includes("Mod_Security") ||
+              bodyStr.includes("ModSecurity")
+            ) {
+              reject(
+                new Error(
+                  `Requisição bloqueada pelo firewall do servidor (ModSecurity). Código: ${res.statusCode}. Tente reduzir o tamanho da descrição ou remover caracteres especiais.`,
+                ),
+              );
+            } else {
+              reject(
+                new Error(
+                  `Erro ao parsear resposta (HTTP ${res.statusCode}): ${bodyStr.substring(0, 200)}`,
+                ),
+              );
+            }
           }
         });
       });
@@ -261,8 +314,8 @@ class WooCommerceClient {
         reject(new Error("Timeout da requisição"));
       });
 
-      if (data) {
-        req.write(JSON.stringify(data));
+      if (bodyData) {
+        req.write(bodyData);
       }
 
       req.end();

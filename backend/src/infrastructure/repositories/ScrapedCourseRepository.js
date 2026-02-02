@@ -56,9 +56,8 @@ class ScrapedCourseRepository {
       return this.dataCache;
     } catch (error) {
       if (error.code === "ENOENT") {
-        console.warn(
-          `[ScrapedCourseRepository] Arquivo não encontrado: ${this.filePath}`,
-        );
+        // Arquivo não existe ainda - isso é normal em primeira execução
+        // Silenciosamente retornar dados vazios
         return { courses: [], categories: [] };
       }
       throw error;

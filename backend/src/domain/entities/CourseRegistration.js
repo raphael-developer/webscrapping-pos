@@ -68,7 +68,7 @@ class CourseRegistration {
     this.salePrice = props.salePrice || "";
     this.imageUrl = props.imageUrl || "";
     this.galleryImages = props.galleryImages || [];
-    this.status = props.status || "draft";
+    this.status = props.status || "publish";
     this.registrationStatus =
       props.registrationStatus || RegistrationStatus.PENDING_REVIEW;
     this.metadata = props.metadata || {};
@@ -106,17 +106,47 @@ class CourseRegistration {
   }
 
   /**
+   * Gera uma descrição padrão baseada nos dados do curso
+   * @param {Object} courseData - Dados do curso
+   * @returns {string}
+   */
+  static generateDefaultDescription(courseData) {
+    const name = courseData.title || courseData.name || "este curso";
+    const category = courseData.category || "especialização";
+    const modality = courseData.modality || "EAD";
+    const duration = courseData.duration || "";
+
+    let description = `Curso de pós-graduação em ${name} na área de ${category}. `;
+    description += `Modalidade ${modality}. `;
+
+    if (duration) {
+      description += `Carga horária: ${duration}. `;
+    }
+
+    description +=
+      "Entre em contato para mais informações sobre grade curricular, investimento e início das aulas.";
+
+    return description;
+  }
+
+  /**
    * Cria instância a partir de dados de curso scraped
    * @param {Object} scrapedCourse - Dados do curso scraped
    * @returns {CourseRegistration}
    */
   static fromScrapedCourse(scrapedCourse) {
+    // Se não houver descrição, gerar uma automática
+    const description =
+      scrapedCourse.description && scrapedCourse.description.trim().length > 10
+        ? scrapedCourse.description
+        : CourseRegistration.generateDefaultDescription(scrapedCourse);
+
     return new CourseRegistration({
       scrapedCourseId: scrapedCourse.id,
       name: scrapedCourse.title || scrapedCourse.name,
       slug: scrapedCourse.slug,
       category: scrapedCourse.category,
-      description: scrapedCourse.description || "",
+      description: description,
       shortDescription:
         scrapedCourse.shortDescription || scrapedCourse.duration || "",
       duration: scrapedCourse.duration,
@@ -126,6 +156,10 @@ class CourseRegistration {
       metadata: {
         originalData: scrapedCourse,
         scrapedAt: new Date().toISOString(),
+        descriptionGenerated: !(
+          scrapedCourse.description &&
+          scrapedCourse.description.trim().length > 10
+        ),
       },
     });
   }
@@ -270,17 +304,60 @@ class CourseRegistration {
   }
 
   /**
+   * Sanitiza texto para evitar bloqueio do ModSecurity
+   * Remove caracteres problemáticos e limita o tamanho
+   * @param {string} text - Texto a sanitizar
+   * @param {number} maxLength - Tamanho máximo (default: 5000)
+   * @returns {string}
+   */
+  sanitizeForWooCommerce(text, maxLength = 5000) {
+    if (!text) return "";
+
+    let sanitized = text
+      // Remove caracteres de controle
+      .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, "")
+      // Remove tags script e style
+      .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "")
+      .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, "")
+      // Remove atributos on* (onclick, onerror, etc.) que podem disparar regras WAF
+      .replace(/\s+on\w+\s*=\s*["'][^"']*["']/gi, "")
+      // Remove javascript: e data: URLs
+      .replace(/javascript:/gi, "")
+      .replace(/data:/gi, "data-safe:")
+      // Remove expressões SQL-like que podem disparar regras
+      .replace(
+        /(\bselect\b.*\bfrom\b|\binsert\b.*\binto\b|\bupdate\b.*\bset\b|\bdelete\b.*\bfrom\b|\bdrop\b.*\btable\b)/gi,
+        "",
+      )
+      // Remove sequências de caracteres repetidos excessivos
+      .replace(/(.)\1{10,}/g, "$1$1$1")
+      // Remove múltiplos espaços
+      .replace(/\s+/g, " ")
+      .trim();
+
+    // Limitar tamanho
+    if (sanitized.length > maxLength) {
+      sanitized = sanitized.substring(0, maxLength) + "...";
+    }
+
+    return sanitized;
+  }
+
+  /**
    * Converte para formato de produto WooCommerce
    * @returns {Object}
    */
   toWooCommerceProduct() {
     const product = {
-      name: this.name,
+      name: this.sanitizeForWooCommerce(this.name, 200),
       slug: this.slug,
       type: "simple",
       status: this.status,
-      description: this.description,
-      short_description: this.shortDescription,
+      description: this.sanitizeForWooCommerce(this.description, 5000),
+      short_description: this.sanitizeForWooCommerce(
+        this.shortDescription,
+        500,
+      ),
       regular_price: this.regularPrice,
       categories: [],
       meta_data: [

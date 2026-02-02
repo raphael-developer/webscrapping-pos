@@ -136,7 +136,11 @@ class CourseRegistrationRepository {
       throw new Error(`Registro não encontrado: ${id}`);
     }
 
+    // Mesclar dados existentes com atualizações
+    const existingData = existing.toObject ? existing.toObject() : existing;
+
     const updated = new CourseRegistration({
+      ...existingData,
       ...updates,
       id: existing.id,
       createdAt: existing.createdAt,

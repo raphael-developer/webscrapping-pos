@@ -90,7 +90,7 @@ class ScraperController {
       const backupDir = path.join(__dirname, "../../backups");
       await fsp.mkdir(backupDir, { recursive: true }).catch(() => {});
 
-      // Carregar cursos existentes ANTES do scraping
+      // Carregar cursos existentes ANTES do scraping (se existirem)
       let existingCourses = [];
       try {
         if (fs.existsSync(cursosFile)) {
@@ -120,12 +120,16 @@ class ScraperController {
               await fsp.unlink(path.join(backupDir, old)).catch(() => {});
             }
           }
+        } else {
+          // Arquivo não existe - primeira execução ou foi deletado
+          this.emitLog(
+            "info",
+            "📋 Nenhum arquivo de cursos existente - iniciando scraping do zero",
+          );
         }
       } catch (e) {
-        this.emitLog(
-          "warn",
-          `⚠️ Não foi possível ler cursos existentes: ${e.message}`,
-        );
+        // Erro ao ler arquivo - continuar normalmente
+        existingCourses = [];
       }
 
       // Criar mapa de cursos existentes
@@ -195,9 +199,10 @@ class ScraperController {
           c => c.category === incompleteCat,
         ).length;
 
+        // Log informativo (não warning) - ainda vai tentar retry
         this.emitLog(
-          "warn",
-          `⚠️ ${incompleteCat}: apenas ${currentCount} cursos (mínimo esperado: ${minimum})`,
+          "info",
+          `🔄 ${incompleteCat}: ${currentCount} cursos encontrados, verificando... (esperado: ${minimum})`,
         );
 
         for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
@@ -254,7 +259,24 @@ class ScraperController {
         seen.add(key);
 
         const existingCourse = existingMap.get(key);
-        if (!existingCourse) {
+        if (existingCourse) {
+          // PRESERVAR descrição existente se o novo curso não tiver
+          if (
+            existingCourse.description &&
+            existingCourse.description.length > 30
+          ) {
+            if (!c.description || c.description.length <= 30) {
+              c.description = existingCourse.description;
+              c.descriptionSource =
+                existingCourse.descriptionSource || "preserved";
+              c.descriptionFetchedAt = existingCourse.descriptionFetchedAt;
+            }
+          }
+          // Preservar outros campos úteis
+          if (existingCourse.imageUrl && !c.imageUrl) {
+            c.imageUrl = existingCourse.imageUrl;
+          }
+        } else {
           // CURSO NOVO!
           c.isNew = true;
           c.discoveredAt = new Date().toISOString();
@@ -341,7 +363,12 @@ class ScraperController {
       }
 
       // ======= VALIDAÇÃO E SALVAMENTO =======
-      const minRequired = Math.max(existingCourses.length * 0.7, 500);
+      // Proteção: só ativar se já existiam cursos (evita perder dados)
+      // Se não existiam cursos (primeira execução), aceitar qualquer quantidade > 0
+      const minRequired =
+        existingCourses.length > 0
+          ? Math.max(existingCourses.length * 0.7, 500)
+          : 1; // Se não tinha dados, aceitar qualquer quantidade
 
       if (finalCourses.length < minRequired && existingCourses.length > 0) {
         this.emitLog(
@@ -350,6 +377,13 @@ class ScraperController {
         );
         report.saved = false;
         report.reason = "protection_triggered";
+      } else if (finalCourses.length === 0) {
+        this.emitLog(
+          "error",
+          `❌ Nenhum curso foi extraído. Verifique a conexão com o site.`,
+        );
+        report.saved = false;
+        report.reason = "no_courses_extracted";
       } else {
         // Salvar arquivo principal
         await fsp.writeFile(
@@ -431,9 +465,11 @@ class ScraperController {
       try {
         const coursesData = await fs.readFile(cursosFile, "utf8");
         const courses = JSON.parse(coursesData);
-        
+
         if (Array.isArray(courses)) {
-          const categories = [...new Set(courses.map(course => course.category))];
+          const categories = [
+            ...new Set(courses.map(course => course.category)),
+          ];
           stats = {
             totalCourses: courses.length,
             totalCategories: categories.length,
@@ -447,7 +483,8 @@ class ScraperController {
           };
         }
       } catch (fileError) {
-        Logger.warn("Arquivo de cursos não encontrado, usando valores padrão");
+        // Arquivo não existe ainda - isso é normal em primeira execução
+        // Não emitir warning, apenas usar valores padrão
       }
 
       res.json({

@@ -97,11 +97,11 @@ class RegistrationController {
 
   /**
    * GET /api/registration
-   * Lista registros pendentes de revisão
+   * Lista registros (todos ou filtrados por status)
    */
   listPending = async (req, res, next) => {
     try {
-      const { category, search, sortBy, order } = req.query;
+      const { status, category, search, sortBy, order } = req.query;
 
       const useCase = new RegisterCourseUseCase(
         this.registrationRepository,
@@ -109,6 +109,7 @@ class RegistrationController {
       );
 
       const result = await useCase.listPendingRegistrations({
+        status,
         category,
         search,
         sortBy,
@@ -237,6 +238,88 @@ class RegistrationController {
       const result = await useCase.rejectRegistration(id, reason);
 
       res.json(result);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  /**
+   * POST /api/registration/:id/fetch-description
+   * Busca descrição real do site para um registro
+   */
+  fetchSiteDescription = async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const { updateRecord } = req.body; // Se true, atualiza o registro automaticamente
+
+      // Buscar registro
+      const registration = await this.registrationRepository.findById(id);
+      if (!registration) {
+        return res.status(404).json({
+          success: false,
+          message: "Registro não encontrado",
+        });
+      }
+
+      // Verificar se tem URL de origem
+      if (!registration.sourceUrl) {
+        return res.status(400).json({
+          success: false,
+          message: "Registro não possui URL de origem",
+        });
+      }
+
+      // Buscar descrição do site
+      const {
+        fetchCourseDescription,
+      } = require("../../scripts/fetch-course-description");
+      const siteData = await fetchCourseDescription(registration.sourceUrl);
+
+      if (!siteData.success) {
+        return res.status(500).json({
+          success: false,
+          message: "Erro ao buscar descrição do site",
+          error: siteData.error,
+        });
+      }
+
+      // Atualizar registro se solicitado
+      if (updateRecord && siteData.description) {
+        const useCase = new RegisterCourseUseCase(
+          this.registrationRepository,
+          this.wooCommerceRepository,
+        );
+
+        const updatedRegistration = await useCase.updateRegistration(id, {
+          description: siteData.description,
+          metadata: {
+            ...registration.metadata,
+            descriptionGenerated: false,
+            descriptionFetchedAt: new Date().toISOString(),
+            descriptionSource: "site_original",
+          },
+        });
+
+        return res.json({
+          success: true,
+          message: "Descrição atualizada com sucesso",
+          data: {
+            description: siteData.description,
+            objective: siteData.objective,
+            registration: updatedRegistration.data,
+          },
+        });
+      }
+
+      res.json({
+        success: true,
+        data: {
+          description: siteData.description,
+          objective: siteData.objective,
+          workload: siteData.workload,
+          source: siteData.source,
+        },
+      });
     } catch (error) {
       next(error);
     }

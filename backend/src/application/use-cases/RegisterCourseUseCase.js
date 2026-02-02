@@ -61,6 +61,7 @@ class RegisterCourseUseCase {
       "galleryImages",
       "status",
       "customFields",
+      "metadata",
     ];
 
     const filteredUpdates = {};
@@ -286,12 +287,20 @@ class RegisterCourseUseCase {
    * @returns {Promise<Object>}
    */
   async listPendingRegistrations(options = {}) {
-    const { category, search, sortBy = "createdAt", order = "desc" } = options;
+    const {
+      status,
+      category,
+      search,
+      sortBy = "createdAt",
+      order = "desc",
+    } = options;
 
-    let registrations = await this.registrationRepository.findPendingReview();
+    // Buscar todos os registros (não apenas pending_review)
+    let registrations = await this.registrationRepository.findAll();
 
     // Aplicar filtros
     registrations = CourseRegistrationService.filter(registrations, {
+      status,
       category,
       search,
     });
